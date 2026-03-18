@@ -1,0 +1,4 @@
+# Missing equals sign in key-value pair
+[*.go]
+indent_style tab
+indent_size = 4

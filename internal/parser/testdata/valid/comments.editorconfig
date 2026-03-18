@@ -1,0 +1,18 @@
+# EditorConfig with various comment styles
+root = true
+
+# Hash-style comment
+[*.js]
+indent_style = space  # Inline comment with hash
+indent_size = 2
+
+; Semicolon-style comment
+[*.go]
+indent_style = tab  ; Inline comment with semicolon
+tab_width = 4
+
+# Multiple comment lines
+# spanning multiple lines
+# with consistent prefix
+[*.py]
+indent_size = 4

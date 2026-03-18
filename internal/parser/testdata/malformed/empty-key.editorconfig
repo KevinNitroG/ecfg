@@ -1,0 +1,4 @@
+# Empty key before equals
+[*.js]
+= space
+indent_size = 2

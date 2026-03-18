@@ -1,0 +1,27 @@
+# Unicode characters test (emoji, CJK, special characters)
+# 这是中文注释
+# これは日本語のコメントです
+# 🎉 Emoji comment 🚀
+
+root = true
+
+# Section with emoji
+[*.js]
+# Property with Chinese characters: 缩进样式
+indent_style = space
+# Property with Japanese: インデントサイズ
+indent_size = 2
+# Property with emoji: 🔧 charset
+charset = utf-8
+
+# Section with multilingual glob pattern
+[文档.txt]
+charset = utf-8
+
+# Section with emoji in comment
+[*.py]
+# 🐍 Python files
+indent_style = space
+indent_size = 4
+# 编码 encoding
+charset = utf-8

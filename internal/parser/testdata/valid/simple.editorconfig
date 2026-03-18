@@ -1,0 +1,4 @@
+# Simple EditorConfig file with one section
+[*.go]
+indent_style = tab
+indent_size = 4

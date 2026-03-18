@@ -1,0 +1,24 @@
+# Complex glob patterns
+root = true
+
+# Brace expansion with multiple extensions
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+
+# Double-star path matching
+[**/test/**/*.go]
+indent_style = tab
+
+# Nested braces and paths
+[lib/{src,test}/**/*.py]
+indent_style = space
+indent_size = 4
+
+# Character classes
+[[Mm]akefile]
+indent_style = tab
+
+# Numeric ranges
+[{package,bower}.json]
+indent_size = 2

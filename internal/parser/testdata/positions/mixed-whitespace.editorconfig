@@ -1,0 +1,21 @@
+# Mixed whitespace: tabs, spaces, trailing whitespace
+root = true
+
+[*.go]
+	indent_style = tab	
+	tab_width = 4  
+
+[*.js]
+    indent_style = space    
+    indent_size = 2		
+
+# Line with trailing spaces    
+[*.py]
+indent_style = space
+	indent_size = 4    
+  charset = utf-8
+
+# Mixed indentation in key-value
+[*.rb]
+  indent_style	=	space
+    indent_size	=  2  	

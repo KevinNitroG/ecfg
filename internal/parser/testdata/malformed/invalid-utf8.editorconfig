@@ -1,0 +1,5 @@
+# Invalid UTF-8 byte sequences
+[*.go]
+indent_style = tab
+# The following line contains invalid UTF-8: �����
+charset = utf-8

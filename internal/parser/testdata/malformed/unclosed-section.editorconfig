@@ -1,0 +1,6 @@
+# Unclosed section header
+[*.go
+indent_style = tab
+
+[*.js]
+indent_style = space
