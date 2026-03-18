@@ -1,2 +1,3 @@
 [tools]
+go = "1.26.1"
 "npm:get-shit-done-cc" = "1.25.1"
