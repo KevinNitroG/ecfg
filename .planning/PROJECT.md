@@ -27,15 +27,16 @@ Developers can write `.editorconfig` files with confidence through real-time val
 - [ ] Custom Go parser generates AST with precise line/column position data
 - [ ] Parser handles all EditorConfig syntax (comments, preamble, sections, key-value pairs, glob patterns)
 - [ ] Server maintains virtual file system for unsaved document state
-- [ ] VS Code extension spawns and communicates with Go LSP binary
-- [ ] Neovim integration documented via `lspconfig`
+- [ ] Neovim integration via `lspconfig` and configuration documentation
 
 ### Out of Scope
 
 - Tree-sitter parser integration — Custom Go parser is simpler, more maintainable, and sufficient for EditorConfig's simple syntax
 - Non-standard EditorConfig properties — Only official spec properties from spec.editorconfig.org
-- Mobile editor support — Desktop editors (VS Code, Neovim) are primary targets
-- Web-based editor extensions — Focus on native editor LSP clients first
+- VS Code extension — Focus on Neovim/lspconfig as primary editor target
+- Sublime Text, Emacs, IntelliJ — Desktop editor support limited to Neovim
+- Web-based editor extensions — Focus on native editor LSP clients only
+- Mobile editor support — Desktop editors only
 
 ## Context
 
@@ -68,7 +69,7 @@ Custom Go parser preferred over Tree-sitter because:
 
 - **Tech Stack**: Go for LSP server (pure Go, no cgo) — Required for cross-platform compatibility and easy distribution
 - **Spec Compliance**: Must follow official EditorConfig spec at spec.editorconfig.org — Non-negotiable for correctness
-- **Editor Support**: VS Code and Neovim initially — Most common LSP-capable editors
+- **Editor Support**: Neovim via lspconfig — Focus on single LSP-capable editor for simplicity
 - **Performance**: Full document reparse on change is acceptable — EditorConfig files are small (<100 lines typically)
 - **Distribution**: Single binary distribution via GoReleaser — Easy installation for users
 
@@ -80,7 +81,7 @@ Custom Go parser preferred over Tree-sitter because:
 | Use editorconfig-core-go for inheritance | Official library handles file system traversal and parent resolution correctly. Parser focuses on single-file AST, core library handles semantics. | — Pending |
 | Pure Go implementation (no cgo) | Enables trivial cross-compilation, smaller binaries, easier CI/CD, simpler contributor onboarding. | — Pending |
 | LSP protocol via go.lsp.dev/protocol | Standard, well-maintained Go LSP library with good community support. | — Pending |
-| VS Code + Neovim as initial targets | Covers majority of LSP-capable editor users; both have mature LSP client implementations. | — Pending |
+| Neovim as primary editor target | Simplified scope; focus on lspconfig integration for excellent LSP experience in Neovim. | ✓ Good |
 
 ---
 *Last updated: 2026-03-18 after initialization*

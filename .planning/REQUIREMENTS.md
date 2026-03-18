@@ -73,11 +73,8 @@
 
 ### Editor Integration (EDITOR)
 
-- [ ] **EDITOR-01**: VS Code extension spawns Go LSP binary via stdio
-- [ ] **EDITOR-02**: VS Code extension activates on `.editorconfig` file type
-- [ ] **EDITOR-03**: VS Code extension passes LSP messages between editor and server
-- [ ] **EDITOR-04**: Neovim integration documented in README with `lspconfig` example
-- [ ] **EDITOR-05**: Server binary is cross-platform (Linux, macOS, Windows)
+- [ ] **EDITOR-01**: Neovim integration documented in README with `lspconfig` configuration example
+- [ ] **EDITOR-02**: Server binary is cross-platform (Linux, macOS, Windows)
 
 ## v2 Requirements
 
@@ -101,8 +98,7 @@
 ### Extended Editor Support
 
 - **ED-01**: Emacs integration via `lsp-mode`
-- **ED-02**: Sublime Text LSP plugin support
-- **ED-03**: IntelliJ IDEA plugin
+- **ED-02**: VS Code extension
 
 ## Out of Scope
 
@@ -168,13 +164,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | LSP-09 | Phase 5 | Pending |
 | EDITOR-01 | Phase 5 | Pending |
 | EDITOR-02 | Phase 5 | Pending |
-| EDITOR-03 | Phase 5 | Pending |
-| EDITOR-04 | Phase 5 | Pending |
-| EDITOR-05 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 41 total
-- Mapped to phases: 41
+- v1 requirements: 36 total
+- Mapped to phases: 36
 - Unmapped: 0 ✓
 
 ---

@@ -2,7 +2,7 @@
 
 **Created:** 2026-03-18  
 **Granularity:** Coarse (3-5 phases)  
-**Coverage:** 41/41 requirements mapped ✓
+**Coverage:** 36/36 requirements mapped ✓
 
 ## Overview
 
@@ -12,9 +12,9 @@
 | 2 | Schema Validation & Diagnostics | 15 | Pending |
 | 3 | LSP Intelligence Features | 9 | Pending |
 | 4 | File System Resolution | 5 | Pending |
-| 5 | Editor Integration | 5 | Pending |
+| 5 | Editor Integration | 2 | Pending |
 
-**Total: 5 phases covering 41 requirements**
+**Total: 5 phases covering 36 requirements**
 
 ---
 
@@ -145,9 +145,9 @@
 
 ## Phase 5: Editor Integration
 
-**Goal:** Package LSP server and create editor extensions for VS Code and Neovim.
+**Goal:** Package LSP server and document Neovim integration for end users.
 
-**Why this last:** LSP features must work before editor integration. This phase packages everything for end users.
+**Why this last:** LSP features must work before editor integration. This phase packages everything for Neovim users.
 
 **Requirements:**
 - LSP-01: Handles `initialize` request
@@ -159,24 +159,19 @@
 - LSP-07: Handles `textDocument/hover`
 - LSP-08: Handles `textDocument/completion`
 - LSP-09: Handles `textDocument/publishDiagnostics`
-- EDITOR-01: VS Code extension spawns binary via stdio
-- EDITOR-02: VS Code extension activates on `.editorconfig`
-- EDITOR-03: VS Code extension passes LSP messages
-- EDITOR-04: Neovim integration documented
-- EDITOR-05: Server binary is cross-platform
+- EDITOR-01: Neovim integration documented in README
+- EDITOR-02: Server binary is cross-platform
 
 **Success Criteria:**
 1. LSP server responds to `initialize` with correct capabilities
 2. Server maintains virtual file system for unsaved changes
-3. VS Code extension activates on opening `.editorconfig` file
-4. VS Code extension shows hover, completion, diagnostics in editor
-5. Neovim users can configure server via `lspconfig` following README
+3. Neovim users can configure server via `lspconfig` following README
+4. Server works on Linux, macOS, and Windows
 
 **Deliverables:**
 - `cmd/ecfg-lsp/` binary with full LSP lifecycle
 - `internal/lsp/server.go` implementing LSP protocol
-- VS Code extension in `editors/vscode/`
-- Neovim setup documentation in README
+- Neovim setup documentation in README with `lspconfig` example
 - Cross-platform build configuration (Linux, macOS, Windows)
 
 ---
@@ -202,7 +197,7 @@ Phase 5 (Integration) ← requires all features
 
 ## Validation
 
-✓ All 41 v1 requirements mapped  
+✓ All 36 v1 requirements mapped  
 ✓ No unmapped requirements  
 ✓ Each phase has clear deliverables  
 ✓ Success criteria are observable/testable  
