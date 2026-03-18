@@ -3,7 +3,11 @@
   "granularity": "coarse",
   "parallelization": true,
   "commit_docs": true,
-  "model_profile": "inherit",
+  "models": {
+    "implement": "github-copilot/claude-sonnet-4.5",
+    "plan": "github-copilot/claude-sonnet-4.5",
+    "verify": "github-copilot/claude-haiku-4.5"
+  },
   "workflow": {
     "research": true,
     "plan_check": true,
