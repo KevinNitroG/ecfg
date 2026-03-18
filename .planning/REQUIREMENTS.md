@@ -121,12 +121,61 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (To be filled by roadmapper) | | |
+| PARSE-01 | Phase 1 | Pending |
+| PARSE-02 | Phase 1 | Pending |
+| PARSE-03 | Phase 1 | Pending |
+| PARSE-04 | Phase 1 | Pending |
+| PARSE-05 | Phase 1 | Pending |
+| PARSE-06 | Phase 1 | Pending |
+| PARSE-07 | Phase 1 | Pending |
+| SCHEMA-01 | Phase 2 | Pending |
+| SCHEMA-02 | Phase 2 | Pending |
+| SCHEMA-03 | Phase 2 | Pending |
+| SCHEMA-04 | Phase 2 | Pending |
+| SCHEMA-05 | Phase 2 | Pending |
+| SCHEMA-06 | Phase 2 | Pending |
+| SCHEMA-07 | Phase 2 | Pending |
+| SCHEMA-08 | Phase 2 | Pending |
+| SCHEMA-09 | Phase 2 | Pending |
+| DIAG-01 | Phase 2 | Pending |
+| DIAG-02 | Phase 2 | Pending |
+| DIAG-03 | Phase 2 | Pending |
+| DIAG-04 | Phase 2 | Pending |
+| DIAG-05 | Phase 2 | Pending |
+| DIAG-06 | Phase 2 | Pending |
+| HOVER-01 | Phase 3 | Pending |
+| HOVER-02 | Phase 3 | Pending |
+| HOVER-03 | Phase 3 | Pending |
+| HOVER-04 | Phase 3 | Pending |
+| COMP-01 | Phase 3 | Pending |
+| COMP-02 | Phase 3 | Pending |
+| COMP-03 | Phase 3 | Pending |
+| COMP-04 | Phase 3 | Pending |
+| COMP-05 | Phase 3 | Pending |
+| FS-01 | Phase 4 | Pending |
+| FS-02 | Phase 4 | Pending |
+| FS-03 | Phase 4 | Pending |
+| FS-04 | Phase 4 | Pending |
+| FS-05 | Phase 4 | Pending |
+| LSP-01 | Phase 5 | Pending |
+| LSP-02 | Phase 5 | Pending |
+| LSP-03 | Phase 5 | Pending |
+| LSP-04 | Phase 5 | Pending |
+| LSP-05 | Phase 5 | Pending |
+| LSP-06 | Phase 5 | Pending |
+| LSP-07 | Phase 5 | Pending |
+| LSP-08 | Phase 5 | Pending |
+| LSP-09 | Phase 5 | Pending |
+| EDITOR-01 | Phase 5 | Pending |
+| EDITOR-02 | Phase 5 | Pending |
+| EDITOR-03 | Phase 5 | Pending |
+| EDITOR-04 | Phase 5 | Pending |
+| EDITOR-05 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 41 total
-- Mapped to phases: 0
-- Unmapped: 41 ⚠️
+- Mapped to phases: 41
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-18*
