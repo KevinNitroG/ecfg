@@ -44,6 +44,13 @@
 - AST node types with position data
 - Test suite with 20+ test cases
 
+**Plans:** 3 plans in 3 waves
+
+Plans:
+- [ ] 01-01-PLAN.md — Foundation types and test fixtures
+- [ ] 01-02-PLAN.md — Lexer implementation and AST types
+- [ ] 01-03-PLAN.md — Parser implementation with error recovery
+
 ---
 
 ## Phase 2: Schema Validation & Diagnostics
