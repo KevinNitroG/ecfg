@@ -7,7 +7,7 @@
 
 ### Parser (PARSE)
 
-- [ ] **PARSE-01**: Parser generates AST with precise line/column position data for all nodes
+- [x] **PARSE-01**: Parser generates AST with precise line/column position data for all nodes
 - [ ] **PARSE-02**: Parser recognizes preamble key-value pairs (before any section)
 - [ ] **PARSE-03**: Parser recognizes section headers with glob patterns `[*.ext]`
 - [ ] **PARSE-04**: Parser recognizes key-value pairs within sections
@@ -117,7 +117,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PARSE-01 | Phase 1 | Pending |
+| PARSE-01 | Phase 1 | Complete |
 | PARSE-02 | Phase 1 | Pending |
 | PARSE-03 | Phase 1 | Pending |
 | PARSE-04 | Phase 1 | Pending |

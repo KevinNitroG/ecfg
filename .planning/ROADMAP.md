@@ -8,7 +8,7 @@
 
 | Phase | Goal | Requirements | Status |
 |-------|------|--------------|--------|
-| 1 | Core Parser & AST | 7 | Pending |
+| 1 | 1/3 | In Progress|  |
 | 2 | Schema Validation & Diagnostics | 15 | Pending |
 | 3 | LSP Intelligence Features | 9 | Pending |
 | 4 | File System Resolution | 5 | Pending |
@@ -44,7 +44,7 @@
 - AST node types with position data
 - Test suite with 20+ test cases
 
-**Plans:** 3 plans in 3 waves
+**Plans:** 1/3 plans executed
 
 Plans:
 - [ ] 01-01-PLAN.md — Foundation types and test fixtures
