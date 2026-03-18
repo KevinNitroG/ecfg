@@ -159,11 +159,11 @@ func TestLexer(t *testing.T) {
 			tokens: []Token{
 				{Type: TokenComment, Value: "# 你好", Range: Range{
 					Start: Position{Offset: 0, Line: 1, Column: 0},
-					End:   Position{Offset: 8, Line: 1, Column: 3},
+					End:   Position{Offset: 8, Line: 1, Column: 4},
 				}},
 				{Type: TokenEOF, Value: "", Range: Range{
-					Start: Position{Offset: 8, Line: 1, Column: 3},
-					End:   Position{Offset: 8, Line: 1, Column: 3},
+					Start: Position{Offset: 8, Line: 1, Column: 4},
+					End:   Position{Offset: 8, Line: 1, Column: 4},
 				}},
 			},
 		},
