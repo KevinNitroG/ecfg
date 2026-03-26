@@ -8,12 +8,12 @@
 ### Parser (PARSE)
 
 - [x] **PARSE-01**: Parser generates AST with precise line/column position data for all nodes
-- [ ] **PARSE-02**: Parser recognizes preamble key-value pairs (before any section)
-- [ ] **PARSE-03**: Parser recognizes section headers with glob patterns `[*.ext]`
-- [ ] **PARSE-04**: Parser recognizes key-value pairs within sections
+- [x] **PARSE-02**: Parser recognizes preamble key-value pairs (before any section)
+- [x] **PARSE-03**: Parser recognizes section headers with glob patterns `[*.ext]`
+- [x] **PARSE-04**: Parser recognizes key-value pairs within sections
 - [x] **PARSE-05**: Parser recognizes and preserves comments
 - [x] **PARSE-06**: Parser handles malformed input gracefully (error recovery for LSP mid-typing scenarios)
-- [ ] **PARSE-07**: Parser provides node type identification (preamble, section, key, value, comment)
+- [x] **PARSE-07**: Parser provides node type identification (preamble, section, key, value, comment)
 
 ### Schema Validation (SCHEMA)
 
@@ -118,12 +118,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PARSE-01 | Phase 1 | Complete |
-| PARSE-02 | Phase 1 | Pending |
-| PARSE-03 | Phase 1 | Pending |
-| PARSE-04 | Phase 1 | Pending |
+| PARSE-02 | Phase 1 | Complete |
+| PARSE-03 | Phase 1 | Complete |
+| PARSE-04 | Phase 1 | Complete |
 | PARSE-05 | Phase 1 | Complete |
 | PARSE-06 | Phase 1 | Complete |
-| PARSE-07 | Phase 1 | Pending |
+| PARSE-07 | Phase 1 | Complete |
 | SCHEMA-01 | Phase 2 | Pending |
 | SCHEMA-02 | Phase 2 | Pending |
 | SCHEMA-03 | Phase 2 | Pending |
