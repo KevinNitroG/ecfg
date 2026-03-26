@@ -89,6 +89,12 @@ Plans:
 - Schema map with official property definitions
 - Test suite for all validation rules
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Schema definition and validator implementation
+- [ ] 02-02-PLAN.md — Diagnostic generation with duplicate and conflict detection
+
 ---
 
 ## Phase 3: LSP Intelligence Features
