@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 02-02-PLAN.md - Diagnostic generation and conflict detection
-last_updated: "2026-03-26T06:26:02.192Z"
+stopped_at: Completed 03-01-PLAN.md - Position resolution and hover documentation
+last_updated: "2026-03-26T11:51:12.861Z"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 7
+  completed_plans: 6
 ---
 
 # State: EditorConfig Language Server (ecfg)
@@ -73,11 +73,12 @@ Status: All 2/2 plans complete — all 15 requirements finished
 | 01-03 | 7 min | 2 | 3 | 2026-03-26 |
 | 02-01 | 6 min | 2 | 4 | 2026-03-26 |
 | 02-02 | 11 min | 2 | 4 | 2026-03-26 |
+| Phase 03-lsp-intelligence-features P01 | 4 min | 2 tasks | 6 files |
 
 ## Last Session
 
 - **Timestamp:** 2026-03-26T02:00:00Z
-- **Stopped At:** Completed 02-02-PLAN.md - Diagnostic generation and conflict detection
+- **Stopped At:** Completed 03-01-PLAN.md - Position resolution and hover documentation
 - **Resume File:** None
 
 ## Key Decisions
@@ -103,6 +104,9 @@ Status: All 2/2 plans complete — all 15 requirements finished
 | 02-02 | Duplicate detection tracks seen keys per section/preamble separately | Proper scope isolation for duplicate reporting |
 | 02-02 | Logical conflict: indent_style=tab with numeric indent_size triggers warning | Catch common configuration mistakes |
 | 02-02 | Severity mapping: Error for invalid/misplaced, Warning for duplicates/conflicts, Info for redundant | UI prioritization - errors demand attention, warnings suggest review |
+| 03-01 | Use KeyRange for hover highlight on both key and value positions | Consistent highlighting - always highlights the property name regardless of where user hovers |
+| 03-01 | Case-insensitive property lookup for hover | EditorConfig spec allows case-insensitive property names (INDENT_STYLE = indent_style) |
+| 03-01 | Return nil for unknown properties (no hover) | Prevents showing incorrect or misleading information for custom/misspelled properties |
 
 ---
 

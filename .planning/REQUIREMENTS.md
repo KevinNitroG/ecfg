@@ -38,10 +38,10 @@
 
 ### Hover (HOVER)
 
-- [ ] **HOVER-01**: Server provides Markdown hover tooltip for property keys
-- [ ] **HOVER-02**: Hover content includes official spec description from spec.editorconfig.org
-- [ ] **HOVER-03**: Hover content includes valid values for the property
-- [ ] **HOVER-04**: Hover works when cursor is on key name (before `=`)
+- [x] **HOVER-01**: Server provides Markdown hover tooltip for property keys
+- [x] **HOVER-02**: Hover content includes official spec description from spec.editorconfig.org
+- [x] **HOVER-03**: Hover content includes valid values for the property
+- [x] **HOVER-04**: Hover works when cursor is on key name (before `=`)
 
 ### Completion (COMP)
 
@@ -139,10 +139,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DIAG-04 | Phase 2 | Pending |
 | DIAG-05 | Phase 2 | Pending |
 | DIAG-06 | Phase 2 | Pending |
-| HOVER-01 | Phase 3 | Pending |
-| HOVER-02 | Phase 3 | Pending |
-| HOVER-03 | Phase 3 | Pending |
-| HOVER-04 | Phase 3 | Pending |
+| HOVER-01 | Phase 3 | Complete |
+| HOVER-02 | Phase 3 | Complete |
+| HOVER-03 | Phase 3 | Complete |
+| HOVER-04 | Phase 3 | Complete |
 | COMP-01 | Phase 3 | Pending |
 | COMP-02 | Phase 3 | Pending |
 | COMP-03 | Phase 3 | Pending |
