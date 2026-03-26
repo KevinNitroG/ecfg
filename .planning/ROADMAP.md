@@ -8,8 +8,8 @@
 
 | Phase | Goal | Requirements | Status |
 |-------|------|--------------|--------|
-| 1 | 1/3 | In Progress|  |
-| 2 | Schema Validation & Diagnostics | 15 | Pending |
+| 1 | Core Parser & AST | 7 | Complete ✅ |
+| 2 | Schema Validation & Diagnostics | 15 | In Progress (1/2 plans) |
 | 3 | LSP Intelligence Features | 9 | Pending |
 | 4 | File System Resolution | 5 | Pending |
 | 5 | Editor Integration | 2 | Pending |
@@ -44,12 +44,12 @@
 - AST node types with position data
 - Test suite with 20+ test cases
 
-**Plans:** 1/3 plans executed
+**Plans:** 3/3 plans executed ✅
 
 Plans:
-- [ ] 01-01-PLAN.md — Foundation types and test fixtures
-- [ ] 01-02-PLAN.md — Lexer implementation and AST types
-- [ ] 01-03-PLAN.md — Parser implementation with error recovery
+- [x] 01-01-PLAN.md — Foundation types and test fixtures ✅
+- [x] 01-02-PLAN.md — Lexer implementation and AST types ✅
+- [x] 01-03-PLAN.md — Parser implementation with error recovery ✅
 
 ---
 
@@ -89,10 +89,10 @@ Plans:
 - Schema map with official property definitions
 - Test suite for all validation rules
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed ✅
 
 Plans:
-- [ ] 02-01-PLAN.md — Schema definition and validator implementation
+- [x] 02-01-PLAN.md — Schema definition and validator implementation ✅
 - [ ] 02-02-PLAN.md — Diagnostic generation with duplicate and conflict detection
 
 ---

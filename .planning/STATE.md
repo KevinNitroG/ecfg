@@ -2,19 +2,19 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Completed 01-03-PLAN.md - **PHASE 1 COMPLETE**
-last_updated: "2026-03-26T01:32:00.761Z"
+status: in_progress
+stopped_at: Completed 02-01-PLAN.md - Phase 2 Plan 1 (Schema validation) complete
+last_updated: "2026-03-26T01:40:00Z"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 13
+  completed_plans: 4
 ---
 
 # State: EditorConfig Language Server (ecfg)
 
-**Last Updated:** 2026-03-26T01:24:16Z
+**Last Updated:** 2026-03-26T01:40:00Z
 
 ## Project Reference
 
@@ -22,43 +22,39 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core value:** Developers can write `.editorconfig` files with confidence through real-time validation, contextual autocomplete, and inline documentation, preventing configuration errors before they reach production.
 
-**Current focus:** Phase 1 — Core Parser & AST
+**Current focus:** Phase 2 — Schema Validation & Diagnostics (Plan 1 complete)
 
 ## Progress
 
 | Phase | Status | Progress |
 |-------|--------|----------|
-| 1: Core Parser & AST | Complete | 100% (3/3 plans) |
-| 2: Schema Validation & Diagnostics | Pending | 0% |
+| 1: Core Parser & AST | Complete | 100% (3/3 plans) ✅ |
+| 2: Schema Validation & Diagnostics | In Progress | 50% (1/2 plans) |
 | 3: LSP Intelligence Features | Pending | 0% |
 | 4: File System Resolution | Pending | 0% |
 | 5: Editor Integration | Pending | 0% |
 
-**Overall:** 1/5 phases complete (20%)
+**Overall:** 4/13 plans complete (31%)
 
 ## Current Phase
 
-**Phase 1: Core Parser & AST - COMPLETE ✅**
+**Phase 2: Schema Validation & Diagnostics - IN PROGRESS 🔄**
 
-Goal: Parse `.editorconfig` files into AST with precise position tracking for LSP features.
+Goal: Validate EditorConfig properties against spec and emit diagnostics for errors/warnings.
 
-Requirements: PARSE-01 through PARSE-07 (7 requirements) - **ALL COMPLETE**
+Requirements: SCHEMA-01 through SCHEMA-09, DIAG-01 through DIAG-06 (15 requirements)
 
-Status: Complete — 3 of 3 plans finished
+Status: Plan 1/2 complete — 9 schema requirements finished
 
 **Completed Plans:**
-- 01-01: Foundation types and test fixtures ✓
-- 01-02: Lexer implementation and AST types ✓
-- 01-03: Parser implementation with error recovery ✓
+- 02-01: Schema definition and validator implementation ✓
 
-## Next Action
-
-**Phase 1 complete!** Ready to plan Phase 2 (Schema Validation & Diagnostics).
-
-Run `/gsd-plan-phase 02` to create the next phase plan.
+**Upcoming Plans:**
+- 02-02: Diagnostic generation with duplicate and conflict detection
 
 ## Recent Activity
 
+- 2026-03-26T01:40:00Z: Completed plan 02-01 (Schema definition and validator implementation) - Schema validation foundation ready
 - 2026-03-26T01:24:16Z: Completed plan 01-03 (Parser implementation with error recovery) - **PHASE 1 COMPLETE**
 - 2026-03-26T01:14:38Z: Completed plan 01-02 (Lexer implementation and AST types)
 - 2026-03-18T15:04:29Z: Completed plan 01-01 (Foundation types and test fixtures)
@@ -73,11 +69,12 @@ Run `/gsd-plan-phase 02` to create the next phase plan.
 | 01-01 | 3 min | 2 | 14 | 2026-03-18 |
 | 01-02 | 1 min | 2 | 3 | 2026-03-26 |
 | 01-03 | 7 min | 2 | 3 | 2026-03-26 |
+| 02-01 | 6 min | 2 | 4 | 2026-03-26 |
 
 ## Last Session
 
-- **Timestamp:** 2026-03-26T01:24:16Z
-- **Stopped At:** Completed 01-03-PLAN.md - **PHASE 1 COMPLETE**
+- **Timestamp:** 2026-03-26T01:40:00Z
+- **Stopped At:** Completed 02-01-PLAN.md - Schema validation and validator implementation
 - **Resume File:** None
 
 ## Key Decisions
@@ -95,6 +92,10 @@ Run `/gsd-plan-phase 02` to create the next phase plan.
 | 01-03 | Parse() never panics - always returns Document with error list | Robust error recovery ensures LSP server stability |
 | 01-03 | Section headers consume tokens until last ] on line | Supports EditorConfig glob character classes like [[Mm]akefile] |
 | 01-03 | Whitespace trimming per EditorConfig spec (keys/values trimmed, internal preserved) | Spec compliance while maintaining value integrity |
+| 02-01 | Schema-driven validation pattern: define rules once, apply consistently | Flexible and maintainable validation framework |
+| 02-01 | Case-insensitive property matching for spec compliance | EditorConfig spec allows case-insensitive property names |
+| 02-01 | ValidationError.Range uses KeyValue.ValueRange for precise LSP underlines | Diagnostics pinpoint exact invalid values |
+| 02-01 | Separate SpecialValues from ValidValues (indent_size="tab", max_line_length="off") | Handles properties with mixed enum and special values |
 
 ---
 
