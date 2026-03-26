@@ -45,11 +45,11 @@
 
 ### Completion (COMP)
 
-- [ ] **COMP-01**: Server provides completion suggestions for property keys when cursor is before `=`
-- [ ] **COMP-02**: Server provides completion suggestions for enum values when cursor is after `=`
-- [ ] **COMP-03**: Completion suggestions are context-aware (no `root` suggestions inside sections)
-- [ ] **COMP-04**: Completion items include documentation snippets
-- [ ] **COMP-05**: Completion suggests only valid values for the property being edited
+- [x] **COMP-01**: Server provides completion suggestions for property keys when cursor is before `=`
+- [x] **COMP-02**: Server provides completion suggestions for enum values when cursor is after `=`
+- [x] **COMP-03**: Completion suggestions are context-aware (no `root` suggestions inside sections)
+- [x] **COMP-04**: Completion items include documentation snippets
+- [x] **COMP-05**: Completion suggests only valid values for the property being edited
 
 ### File System Resolution (FS)
 
@@ -143,11 +143,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HOVER-02 | Phase 3 | Complete |
 | HOVER-03 | Phase 3 | Complete |
 | HOVER-04 | Phase 3 | Complete |
-| COMP-01 | Phase 3 | Pending |
-| COMP-02 | Phase 3 | Pending |
-| COMP-03 | Phase 3 | Pending |
-| COMP-04 | Phase 3 | Pending |
-| COMP-05 | Phase 3 | Pending |
+| COMP-01 | Phase 3 | Complete |
+| COMP-02 | Phase 3 | Complete |
+| COMP-03 | Phase 3 | Complete |
+| COMP-04 | Phase 3 | Complete |
+| COMP-05 | Phase 3 | Complete |
 | FS-01 | Phase 4 | Pending |
 | FS-02 | Phase 4 | Pending |
 | FS-03 | Phase 4 | Pending |

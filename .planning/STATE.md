@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 03-01-PLAN.md - Position resolution and hover documentation
-last_updated: "2026-03-26T11:51:12.861Z"
+stopped_at: Completed 03-02-PLAN.md - LSP completion functionality
+last_updated: "2026-03-26T15:57:58.969Z"
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # State: EditorConfig Language Server (ecfg)
@@ -74,11 +74,12 @@ Status: All 2/2 plans complete — all 15 requirements finished
 | 02-01 | 6 min | 2 | 4 | 2026-03-26 |
 | 02-02 | 11 min | 2 | 4 | 2026-03-26 |
 | Phase 03-lsp-intelligence-features P01 | 4 min | 2 tasks | 6 files |
+| Phase 03 P02 | 15 | 2 tasks | 2 files |
 
 ## Last Session
 
 - **Timestamp:** 2026-03-26T02:00:00Z
-- **Stopped At:** Completed 03-01-PLAN.md - Position resolution and hover documentation
+- **Stopped At:** Completed 03-02-PLAN.md - LSP completion functionality
 - **Resume File:** None
 
 ## Key Decisions
@@ -107,7 +108,10 @@ Status: All 2/2 plans complete — all 15 requirements finished
 | 03-01 | Use KeyRange for hover highlight on both key and value positions | Consistent highlighting - always highlights the property name regardless of where user hovers |
 | 03-01 | Case-insensitive property lookup for hover | EditorConfig spec allows case-insensitive property names (INDENT_STYLE = indent_style) |
 | 03-01 | Return nil for unknown properties (no hover) | Prevents showing incorrect or misleading information for custom/misspelled properties |
+| 03-02 | Empty value range handling: same-line check for cursor after = | Parser creates Start==End range for empty values; containsPosition excludes boundary, so check if cursor on same line after key |
+| 03-02 | Type-specific value completion: enum→ValidValues, integer→SpecialValues only | Users type numbers for integers; suggest only enum values and special cases (tab, off) |
+| 03-02 | Property key completion filters by PreambleOnly flag | Root property excluded from section completions via Schema.PreambleOnly check |
 
 ---
 
-*State updated: 2026-03-26T01:14:38Z after completing plan 01-02*
+*State updated: 2026-03-26T12:06:00Z after completing plan 03-02*
