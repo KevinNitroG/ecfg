@@ -11,8 +11,8 @@
 - [ ] **PARSE-02**: Parser recognizes preamble key-value pairs (before any section)
 - [ ] **PARSE-03**: Parser recognizes section headers with glob patterns `[*.ext]`
 - [ ] **PARSE-04**: Parser recognizes key-value pairs within sections
-- [ ] **PARSE-05**: Parser recognizes and preserves comments
-- [ ] **PARSE-06**: Parser handles malformed input gracefully (error recovery for LSP mid-typing scenarios)
+- [x] **PARSE-05**: Parser recognizes and preserves comments
+- [x] **PARSE-06**: Parser handles malformed input gracefully (error recovery for LSP mid-typing scenarios)
 - [ ] **PARSE-07**: Parser provides node type identification (preamble, section, key, value, comment)
 
 ### Schema Validation (SCHEMA)
@@ -121,8 +121,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PARSE-02 | Phase 1 | Pending |
 | PARSE-03 | Phase 1 | Pending |
 | PARSE-04 | Phase 1 | Pending |
-| PARSE-05 | Phase 1 | Pending |
-| PARSE-06 | Phase 1 | Pending |
+| PARSE-05 | Phase 1 | Complete |
+| PARSE-06 | Phase 1 | Complete |
 | PARSE-07 | Phase 1 | Pending |
 | SCHEMA-01 | Phase 2 | Pending |
 | SCHEMA-02 | Phase 2 | Pending |
