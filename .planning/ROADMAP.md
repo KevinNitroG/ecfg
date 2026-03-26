@@ -10,7 +10,7 @@
 |-------|------|--------------|--------|
 | 1 | Core Parser & AST | 7 | Complete ✅ |
 | 2 | Schema Validation & Diagnostics | 15 | Complete ✅ |
-| 3 | LSP Intelligence Features | 9 | Pending |
+| 3 | LSP Intelligence Features | 9 | Complete ✅ |
 | 4 | File System Resolution | 5 | Pending |
 | 5 | Editor Integration | 2 | Pending |
 
@@ -126,6 +126,12 @@ Plans:
 - `internal/lsp/completion.go` implementing `textDocument/completion`
 - Schema map extended with Markdown documentation strings
 - Test suite for hover and completion edge cases
+
+**Plans:** 2/2 plans created ✅
+
+Plans:
+- [x] 03-01-PLAN.md — Position resolution and hover documentation ✅
+- [x] 03-02-PLAN.md — Context-aware completion ✅
 
 ---
 
