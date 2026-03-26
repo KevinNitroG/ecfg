@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://golangci-lint.run/jsonschema/golangci.jsonschema.json
+version: "2"
+
+linters:
+  enable:
+    - exhaustive
+  disable:
+    - unused
+  exclusions:
+    generated: strict
+
+formatters:
+  enable:
+    - gofumpt
+  settings:
+    gofumpt:
+      module-path: github.com/KevinNitroG/ecfg
+  exclusions:
+    generated: strict
