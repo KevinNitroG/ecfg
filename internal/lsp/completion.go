@@ -25,22 +25,56 @@ type CompletionContext struct {
 //  1. Try to resolve position to existing KeyValue node
 //  2. If found and on key part → completing key
 //  3. If found and on value part → completing value for that property
-//  4. If not found → assume completing new property key
+//  4. If not found → check if there's a KeyValue on the same line with cursor after the key
+//     (this handles "property = |" where cursor is in empty value position)
+//  5. Otherwise → assume completing new property key
 func detectCompletionContext(doc *parser.Document, pos protocol.Position) CompletionContext {
 	ctx := CompletionContext{}
+	parserPos := lspPositionToParser(pos)
 
 	// Try to resolve to existing node
 	node := FindNodeAtPosition(doc, pos)
 
 	if node == nil {
-		// Not on existing node - assume typing new property key
+		// Not on existing node - but check if we're after a KeyValue's equals sign
+		// This handles completion for empty values like "indent_style = |"
+
+		// Check preamble first
+		if doc.Preamble != nil {
+			for _, kv := range doc.Preamble.Pairs {
+				// If cursor is on the same line as the KeyValue and after the key
+				if kv.Range.Start.Line == parserPos.Line && parserPos.Column > kv.KeyRange.End.Column {
+					// We're completing the value for this property
+					ctx.CompletingValue = true
+					ctx.PropertyKey = kv.Key
+					ctx.InPreamble = true
+					ctx.InSection = false
+					return ctx
+				}
+			}
+		}
+
+		// Check sections
+		for _, section := range doc.Sections {
+			for _, kv := range section.Pairs {
+				// If cursor is on the same line as the KeyValue and after the key
+				if kv.Range.Start.Line == parserPos.Line && parserPos.Column > kv.KeyRange.End.Column {
+					// We're completing the value for this property
+					ctx.CompletingValue = true
+					ctx.PropertyKey = kv.Key
+					ctx.InPreamble = false
+					ctx.InSection = true
+					return ctx
+				}
+			}
+		}
+
+		// Not on or after existing KeyValue - assume typing new property key
 		ctx.CompletingKey = true
 
 		// Determine if in preamble or section
 		// Strategy: Check if any section appears before or at this line
 		// If no section exists before the cursor, we're in preamble
-		parserPos := lspPositionToParser(pos)
-
 		inAnySection := false
 		for _, section := range doc.Sections {
 			// Check if section starts at or before cursor line
@@ -62,12 +96,17 @@ func detectCompletionContext(doc *parser.Document, pos protocol.Position) Comple
 	}
 
 	// On existing KeyValue node
-	if node.Part == PartKey {
+	switch node.Part {
+	case PartKey:
 		ctx.CompletingKey = true
 		ctx.PropertyKey = node.KeyValue.Key // User might be editing existing key
-	} else if node.Part == PartValue {
+	case PartValue:
 		ctx.CompletingValue = true
 		ctx.PropertyKey = node.KeyValue.Key // Complete values for this property
+	case PartNone:
+		// Position resolved to KeyValue but not specifically on key or value
+		// This shouldn't happen in practice, but handle it gracefully
+		ctx.CompletingKey = true
 	}
 
 	ctx.InPreamble = node.InPreamble
