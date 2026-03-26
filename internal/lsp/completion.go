@@ -1,7 +1,12 @@
 package lsp
 
 import (
+	"fmt"
+	"sort"
+	"strings"
+
 	"github.com/KevinNitroG/ecfg/internal/parser"
+	"github.com/KevinNitroG/ecfg/internal/validator"
 	"go.lsp.dev/protocol"
 )
 
@@ -69,4 +74,113 @@ func detectCompletionContext(doc *parser.Document, pos protocol.Position) Comple
 	ctx.InSection = node.InSection
 
 	return ctx
+}
+
+// completePropertyKeys returns completion items for property keys.
+// Filters out preamble-only properties (like "root") when not in preamble.
+func completePropertyKeys(inPreamble bool) []protocol.CompletionItem {
+	items := []protocol.CompletionItem{}
+
+	for name, schema := range validator.Schema {
+		// Filter out root if not in preamble
+		if schema.PreambleOnly && !inPreamble {
+			continue
+		}
+
+		detail := schema.Type.String()
+
+		// Add insert text with " = " suffix for convenience
+		insertText := name + " = "
+
+		item := protocol.CompletionItem{
+			Label:  name,
+			Kind:   protocol.CompletionItemKindProperty,
+			Detail: detail,
+			Documentation: &protocol.MarkupContent{
+				Kind:  protocol.Markdown,
+				Value: schema.Description,
+			},
+			InsertText:       insertText,
+			InsertTextFormat: protocol.InsertTextFormatPlainText,
+		}
+
+		items = append(items, item)
+	}
+
+	// Sort alphabetically for consistent ordering
+	sort.Slice(items, func(i, j int) bool {
+		return items[i].Label < items[j].Label
+	})
+
+	return items
+}
+
+// completePropertyValues returns completion items for property values.
+// Returns enum values, special values, or empty list based on property type.
+func completePropertyValues(propertyKey string) []protocol.CompletionItem {
+	// Case-insensitive lookup
+	propertyKey = strings.ToLower(strings.TrimSpace(propertyKey))
+
+	schema, exists := validator.Schema[propertyKey]
+	if !exists {
+		return []protocol.CompletionItem{} // Unknown property
+	}
+
+	items := []protocol.CompletionItem{}
+
+	// For integer properties, don't suggest completions (user types number)
+	// But do suggest special values if any exist
+	if schema.Type == validator.PropertyTypeInteger {
+		if len(schema.SpecialValues) == 0 {
+			return []protocol.CompletionItem{}
+		}
+	}
+
+	// Add enum values
+	for _, value := range schema.ValidValues {
+		detail := fmt.Sprintf("Valid value for %s", propertyKey)
+		item := protocol.CompletionItem{
+			Label:      value,
+			Kind:       protocol.CompletionItemKindValue,
+			Detail:     detail,
+			InsertText: value,
+		}
+		items = append(items, item)
+	}
+
+	// Add special values (e.g., "tab" for indent_size, "off" for max_line_length)
+	for _, value := range schema.SpecialValues {
+		detail := fmt.Sprintf("Special value for %s", propertyKey)
+		item := protocol.CompletionItem{
+			Label:      value,
+			Kind:       protocol.CompletionItemKindValue,
+			Detail:     detail,
+			InsertText: value,
+		}
+		items = append(items, item)
+	}
+
+	return items
+}
+
+// ComputeCompletion computes completion items for a given position.
+// Returns context-aware property keys or property values based on cursor position.
+func ComputeCompletion(doc *parser.Document, pos protocol.Position) *protocol.CompletionList {
+	ctx := detectCompletionContext(doc, pos)
+
+	var items []protocol.CompletionItem
+
+	if ctx.CompletingKey {
+		items = completePropertyKeys(ctx.InPreamble)
+	} else if ctx.CompletingValue {
+		items = completePropertyValues(ctx.PropertyKey)
+	} else {
+		// Unknown context, return empty
+		items = []protocol.CompletionItem{}
+	}
+
+	return &protocol.CompletionList{
+		IsIncomplete: false, // EditorConfig is small, always return all
+		Items:        items,
+	}
 }
