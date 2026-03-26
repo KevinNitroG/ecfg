@@ -21,11 +21,16 @@ type ValidationError struct {
 
 	// Range is the position in the source file for LSP diagnostics
 	Range parser.Range
+
+	// IsWarning indicates whether this is a warning (true) or error (false).
+	// Used to distinguish errors from warnings (duplicates, conflicts).
+	IsWarning bool
 }
 
 // Validate checks an AST document against the EditorConfig schema.
 // It returns a slice of ValidationErrors for any violations found.
 // An empty slice means the document is valid.
+// Includes detection of duplicates and logical conflicts.
 func Validate(doc *parser.Document) []ValidationError {
 	var errors []ValidationError
 
@@ -33,20 +38,66 @@ func Validate(doc *parser.Document) []ValidationError {
 		return errors
 	}
 
-	// Validate preamble
+	// Validate preamble with duplicate and conflict detection
 	if doc.Preamble != nil {
-		for _, kv := range doc.Preamble.Pairs {
-			if err := validateProperty(kv, true); err != nil {
-				errors = append(errors, *err)
-			}
+		errors = append(errors, validateKeyValues(doc.Preamble.Pairs, true)...)
+	}
+
+	// Validate sections with duplicate and conflict detection
+	for _, section := range doc.Sections {
+		errors = append(errors, validateKeyValues(section.Pairs, false)...)
+	}
+
+	return errors
+}
+
+// validateKeyValues validates a list of key-value pairs with duplicate and conflict detection.
+func validateKeyValues(kvs []*parser.KeyValue, inPreamble bool) []ValidationError {
+	var errors []ValidationError
+	seen := make(map[string]*parser.KeyValue)              // Track duplicates
+	properties := make(map[string]string)                  // Track for conflict detection
+	propertyKeyValues := make(map[string]*parser.KeyValue) // Track KeyValue for range
+
+	for _, kv := range kvs {
+		// Check schema validation (existing logic)
+		if err := validateProperty(kv, inPreamble); err != nil {
+			errors = append(errors, *err)
+		}
+
+		// Check for duplicate key (DIAG-03)
+		key := strings.ToLower(kv.Key)
+		if prev, exists := seen[key]; exists {
+			errors = append(errors, ValidationError{
+				Property:  kv.Key,
+				Value:     kv.Value,
+				Reason:    fmt.Sprintf("duplicate key (first defined at line %d)", prev.KeyRange.Start.Line),
+				Range:     kv.KeyRange, // Underline the duplicate key
+				IsWarning: true,
+			})
+		} else {
+			seen[key] = kv
+			properties[key] = strings.ToLower(kv.Value)
+			propertyKeyValues[key] = kv
 		}
 	}
 
-	// Validate sections
-	for _, section := range doc.Sections {
-		for _, kv := range section.Pairs {
-			if err := validateProperty(kv, false); err != nil {
-				errors = append(errors, *err)
+	// Check for logical conflicts (DIAG-04)
+	if indentStyle, ok := properties["indent_style"]; ok {
+		if indentSize, ok := properties["indent_size"]; ok {
+			// indent_style=tab + numeric indent_size is a conflict
+			if indentStyle == "tab" && indentSize != "tab" {
+				if _, err := strconv.Atoi(indentSize); err == nil {
+					// Find the indent_size KeyValue for Range
+					if kvRef, exists := propertyKeyValues["indent_size"]; exists {
+						errors = append(errors, ValidationError{
+							Property:  "indent_size",
+							Value:     kvRef.Value,
+							Reason:    "logical conflict: indent_style=tab with numeric indent_size (use 'tab' or remove indent_size)",
+							Range:     kvRef.ValueRange,
+							IsWarning: true,
+						})
+					}
+				}
 			}
 		}
 	}

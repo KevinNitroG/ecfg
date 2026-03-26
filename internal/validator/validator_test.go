@@ -284,3 +284,154 @@ end_of_line = lf`
 		t.Fatalf("Expected 0 errors for valid section, got %d: %v", len(errors), errors)
 	}
 }
+
+// TestValidateDuplicateKeyInSection tests detection of duplicate keys within a section.
+func TestValidateDuplicateKeyInSection(t *testing.T) {
+	source := `[*.go]
+indent_size = 4
+indent_size = 2`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	if len(errors) != 1 {
+		t.Fatalf("Expected 1 error for duplicate key, got %d: %v", len(errors), errors)
+	}
+
+	err := errors[0]
+	if err.Property != "indent_size" {
+		t.Errorf("Expected property 'indent_size', got %q", err.Property)
+	}
+	if !err.IsWarning {
+		t.Error("Expected IsWarning=true for duplicate key")
+	}
+	if err.Value != "2" {
+		t.Errorf("Expected value '2' (second occurrence), got %q", err.Value)
+	}
+}
+
+// TestValidateDuplicateKeyInPreamble tests detection of duplicate keys in preamble.
+func TestValidateDuplicateKeyInPreamble(t *testing.T) {
+	source := `root = true
+root = false
+[*.go]
+indent_style = tab`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	if len(errors) != 1 {
+		t.Fatalf("Expected 1 error for duplicate root in preamble, got %d: %v", len(errors), errors)
+	}
+
+	err := errors[0]
+	if err.Property != "root" {
+		t.Errorf("Expected property 'root', got %q", err.Property)
+	}
+	if !err.IsWarning {
+		t.Error("Expected IsWarning=true for duplicate key")
+	}
+}
+
+// TestValidateConflictIndentStyleTabWithNumericIndentSize tests logical conflict detection.
+func TestValidateConflictIndentStyleTabWithNumericIndentSize(t *testing.T) {
+	source := `[*.go]
+indent_style = tab
+indent_size = 4`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	if len(errors) != 1 {
+		t.Fatalf("Expected 1 error for tab + numeric size conflict, got %d: %v", len(errors), errors)
+	}
+
+	err := errors[0]
+	if err.Property != "indent_size" {
+		t.Errorf("Expected property 'indent_size', got %q", err.Property)
+	}
+	if !err.IsWarning {
+		t.Error("Expected IsWarning=true for conflict")
+	}
+	if err.Value != "4" {
+		t.Errorf("Expected value '4', got %q", err.Value)
+	}
+}
+
+// TestValidateNoConflictIndentStyleSpaceWithNumericIndentSize tests that space + numeric is valid.
+func TestValidateNoConflictIndentStyleSpaceWithNumericIndentSize(t *testing.T) {
+	source := `[*.go]
+indent_style = space
+indent_size = 4`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	if len(errors) != 0 {
+		t.Fatalf("Expected 0 errors for space + numeric size, got %d: %v", len(errors), errors)
+	}
+}
+
+// TestValidateNoConflictIndentStyleTabWithTabIndentSize tests that tab + tab is valid.
+func TestValidateNoConflictIndentStyleTabWithTabIndentSize(t *testing.T) {
+	source := `[*.go]
+indent_style = tab
+indent_size = tab`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	if len(errors) != 0 {
+		t.Fatalf("Expected 0 errors for tab + tab indent size, got %d: %v", len(errors), errors)
+	}
+}
+
+// TestValidateMultipleDuplicates tests detection of multiple duplicate keys.
+func TestValidateMultipleDuplicates(t *testing.T) {
+	source := `[*.go]
+indent_style = tab
+indent_style = space
+indent_size = 4
+indent_size = 2`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	// Should have: 1 duplicate warning for indent_style + 1 duplicate warning for indent_size + 1 conflict warning (tab + 4)
+	if len(errors) != 3 {
+		t.Fatalf("Expected 3 errors (2 duplicates + 1 conflict), got %d: %v", len(errors), errors)
+	}
+
+	// Check all are marked as warnings
+	for i, err := range errors {
+		if !err.IsWarning {
+			t.Errorf("Error %d: expected IsWarning=true, got false", i)
+		}
+	}
+}
+
+// TestValidateCombinedErrorsAndWarnings tests mix of validation errors and conflict warnings.
+func TestValidateCombinedErrorsAndWarnings(t *testing.T) {
+	source := `[*.go]
+indent_style = invalid
+indent_style = tab
+indent_size = 4`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	// Should have: 1 error for invalid enum, 1 warning for duplicate indent_style
+	if len(errors) != 2 {
+		t.Fatalf("Expected 2 errors for invalid + duplicate, got %d: %v", len(errors), errors)
+	}
+
+	// Find error and warning
+	var hasError, hasWarning bool
+	for _, err := range errors {
+		if err.IsWarning {
+			hasWarning = true
+		} else {
+			hasError = true
+		}
+	}
+
+	if !hasError {
+		t.Error("Expected an error (invalid enum)")
+	}
+	if !hasWarning {
+		t.Error("Expected a warning (duplicate)")
+	}
+}
