@@ -1,0 +1,21 @@
+{
+  "backed_up_at": "2026-03-26T16:14:32.938Z",
+  "from_version": "1.25.1",
+  "files": [
+    "agents/gsd-codebase-mapper.md",
+    "agents/gsd-debugger.md",
+    "agents/gsd-executor.md",
+    "agents/gsd-integration-checker.md",
+    "agents/gsd-nyquist-auditor.md",
+    "agents/gsd-phase-researcher.md",
+    "agents/gsd-plan-checker.md",
+    "agents/gsd-planner.md",
+    "agents/gsd-project-researcher.md",
+    "agents/gsd-research-synthesizer.md",
+    "agents/gsd-roadmapper.md",
+    "agents/gsd-ui-auditor.md",
+    "agents/gsd-ui-checker.md",
+    "agents/gsd-ui-researcher.md",
+    "agents/gsd-verifier.md"
+  ]
+}
