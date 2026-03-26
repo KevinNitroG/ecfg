@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 02-01-PLAN.md - Phase 2 Plan 1 (Schema validation) complete
-last_updated: "2026-03-26T01:40:00Z"
+stopped_at: Completed 02-02-PLAN.md - Phase 2 Plan 2 (Diagnostic generation) complete
+last_updated: "2026-03-26T02:00:00Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 13
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # State: EditorConfig Language Server (ecfg)
@@ -29,32 +29,34 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | Phase | Status | Progress |
 |-------|--------|----------|
 | 1: Core Parser & AST | Complete | 100% (3/3 plans) ✅ |
-| 2: Schema Validation & Diagnostics | In Progress | 50% (1/2 plans) |
+| 2: Schema Validation & Diagnostics | Complete | 100% (2/2 plans) ✅ |
 | 3: LSP Intelligence Features | Pending | 0% |
 | 4: File System Resolution | Pending | 0% |
 | 5: Editor Integration | Pending | 0% |
 
-**Overall:** 4/13 plans complete (31%)
+**Overall:** 5/13 plans complete (38%)
 
 ## Current Phase
 
-**Phase 2: Schema Validation & Diagnostics - IN PROGRESS 🔄**
+**Phase 2: Schema Validation & Diagnostics - COMPLETE ✅**
 
 Goal: Validate EditorConfig properties against spec and emit diagnostics for errors/warnings.
 
 Requirements: SCHEMA-01 through SCHEMA-09, DIAG-01 through DIAG-06 (15 requirements)
 
-Status: Plan 1/2 complete — 9 schema requirements finished
+Status: All 2/2 plans complete — all 15 requirements finished
 
 **Completed Plans:**
 - 02-01: Schema definition and validator implementation ✓
+- 02-02: Diagnostic generation with duplicate and conflict detection ✓
 
-**Upcoming Plans:**
-- 02-02: Diagnostic generation with duplicate and conflict detection
+**Upcoming Phase:**
+- 03: LSP Intelligence Features (hover, completion, etc.)
 
 ## Recent Activity
 
-- 2026-03-26T01:40:00Z: Completed plan 02-01 (Schema definition and validator implementation) - Schema validation foundation ready
+- 2026-03-26T02:00:00Z: Completed plan 02-02 (Diagnostic generation with duplicate and conflict detection) - Phase 2 COMPLETE ✅
+- 2026-03-26T01:40:00Z: Completed plan 02-01 (Schema definition and validator implementation)
 - 2026-03-26T01:24:16Z: Completed plan 01-03 (Parser implementation with error recovery) - **PHASE 1 COMPLETE**
 - 2026-03-26T01:14:38Z: Completed plan 01-02 (Lexer implementation and AST types)
 - 2026-03-18T15:04:29Z: Completed plan 01-01 (Foundation types and test fixtures)
@@ -70,11 +72,12 @@ Status: Plan 1/2 complete — 9 schema requirements finished
 | 01-02 | 1 min | 2 | 3 | 2026-03-26 |
 | 01-03 | 7 min | 2 | 3 | 2026-03-26 |
 | 02-01 | 6 min | 2 | 4 | 2026-03-26 |
+| 02-02 | 11 min | 2 | 4 | 2026-03-26 |
 
 ## Last Session
 
-- **Timestamp:** 2026-03-26T01:40:00Z
-- **Stopped At:** Completed 02-01-PLAN.md - Schema validation and validator implementation
+- **Timestamp:** 2026-03-26T02:00:00Z
+- **Stopped At:** Completed 02-02-PLAN.md - Diagnostic generation and conflict detection
 - **Resume File:** None
 
 ## Key Decisions
@@ -96,6 +99,10 @@ Status: Plan 1/2 complete — 9 schema requirements finished
 | 02-01 | Case-insensitive property matching for spec compliance | EditorConfig spec allows case-insensitive property names |
 | 02-01 | ValidationError.Range uses KeyValue.ValueRange for precise LSP underlines | Diagnostics pinpoint exact invalid values |
 | 02-01 | Separate SpecialValues from ValidValues (indent_size="tab", max_line_length="off") | Handles properties with mixed enum and special values |
+| 02-02 | IsWarning field distinguishes warnings from errors in ValidationError | Enables different diagnostic severity levels |
+| 02-02 | Duplicate detection tracks seen keys per section/preamble separately | Proper scope isolation for duplicate reporting |
+| 02-02 | Logical conflict: indent_style=tab with numeric indent_size triggers warning | Catch common configuration mistakes |
+| 02-02 | Severity mapping: Error for invalid/misplaced, Warning for duplicates/conflicts, Info for redundant | UI prioritization - errors demand attention, warnings suggest review |
 
 ---
 
