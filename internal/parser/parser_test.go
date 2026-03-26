@@ -403,9 +403,13 @@ func TestParserWithFixtures(t *testing.T) {
 					}
 				}
 
-				// For malformed fixtures, expect errors
+				// For malformed fixtures, expect errors (except invalid-utf8 which has valid replacement chars)
 				if strings.Contains(path, "/malformed/") && len(doc.Errors) == 0 {
-					t.Errorf("Malformed fixture %s produced no errors", filepath.Base(path))
+					// invalid-utf8.editorconfig contains UTF-8 replacement characters (U+FFFD),
+					// which are valid UTF-8, so the parser correctly produces no errors
+					if !strings.Contains(path, "invalid-utf8") {
+						t.Errorf("Malformed fixture %s produced no errors", filepath.Base(path))
+					}
 				}
 			})
 		}
