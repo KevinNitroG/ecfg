@@ -7,6 +7,8 @@ builds:
   - id: ecfg-lsp
     main: ./cmd/ecfg-lsp/main.go
     binary: ecfg-lsp
+    env:
+      - CGO_ENABLED=0
     goos:
       - linux
       - darwin
@@ -19,13 +21,10 @@ builds:
 archives:
   - id: default
     formats:
-      - tar.gz
-      - zip
-    files:
-      - README.md
+      - binary
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 
 changelog:
   filters:
