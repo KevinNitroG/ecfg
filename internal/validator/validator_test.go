@@ -435,3 +435,65 @@ indent_size = 4`
 		t.Error("Expected a warning (duplicate)")
 	}
 }
+
+// TestValidateSectionHeaderValidPatterns tests valid glob patterns in section headers.
+func TestValidateSectionHeaderValidPatterns(t *testing.T) {
+	validPatterns := []string{
+		"*.go",
+		"*.js",
+		"*.py",
+		"[*.go]",
+		"src/*.js",
+		"**/*.ts",
+		"project/*.{js,ts}",
+		"?orld",
+		"file[0-9].txt",
+	}
+
+	for _, pattern := range validPatterns {
+		source := "[" + pattern + "]\nindent_style = tab"
+		doc, _ := parser.Parse([]byte(source))
+
+		errors := Validate(doc)
+		if len(errors) != 0 {
+			t.Errorf("Pattern %q should be valid, got errors: %v", pattern, errors)
+		}
+	}
+}
+
+// TestValidateSectionHeaderInvalidPatterns tests invalid glob patterns in section headers.
+func TestValidateSectionHeaderInvalidPatterns(t *testing.T) {
+	invalidPatterns := []string{
+		"[",  // Incomplete bracket (causes panic in fnmatch)
+		"[*", // Incomplete bracket
+	}
+
+	for _, pattern := range invalidPatterns {
+		source := "[" + pattern + "]\nindent_style = tab"
+		doc, _ := parser.Parse([]byte(source))
+
+		errors := Validate(doc)
+		if len(errors) == 0 {
+			t.Errorf("Pattern %q should be invalid, but no errors found", pattern)
+		}
+	}
+}
+
+// TestValidateMultipleSectionsWithMixedPatterns tests multiple sections with valid and invalid patterns.
+func TestValidateMultipleSectionsWithMixedPatterns(t *testing.T) {
+	// Use a pattern that triggers validation but not parse errors
+	// "[*" triggers validation error but is well-formed at parse time
+	source := `[*.go]
+indent_style = tab
+[*
+indent_style = space
+[*.js]
+indent_style = space`
+	doc, _ := parser.Parse([]byte(source))
+
+	errors := Validate(doc)
+	// Should have at least one error for the invalid pattern [*
+	if len(errors) < 1 {
+		t.Fatalf("Expected at least 1 error for invalid pattern, got %d: %v", len(errors), errors)
+	}
+}

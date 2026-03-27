@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/KevinNitroG/ecfg/internal/parser"
+	"github.com/editorconfig/editorconfig-core-go/v2"
 )
 
 // ValidationError represents a validation error with precise position information.
@@ -46,6 +47,8 @@ func Validate(doc *parser.Document) []ValidationError {
 	// Validate sections with duplicate and conflict detection
 	for _, section := range doc.Sections {
 		errors = append(errors, validateKeyValues(section.Pairs, false)...)
+		// Validate section header glob pattern
+		errors = append(errors, validateSectionHeader(section, doc)...)
 	}
 
 	return errors
@@ -244,4 +247,116 @@ func validateBooleanValue(kv *parser.KeyValue, schema PropertySchema) *Validatio
 		Reason:   fmt.Sprintf("invalid value %q for boolean property %s; must be 'true' or 'false'", kv.Value, kv.Key),
 		Range:    kv.ValueRange,
 	}
+}
+
+// validateSectionHeader validates the glob pattern in a section header.
+// It uses editorconfig-core-go's fnmatch to validate the pattern syntax.
+// It also checks for parse errors that indicate malformed section headers.
+func validateSectionHeader(section *parser.Section, doc *parser.Document) []ValidationError {
+	var errors []ValidationError
+
+	if section == nil || section.Header == "" {
+		return errors
+	}
+
+	// First check if there were parse errors related to this section header
+	// The parser recovers from missing ] by extracting partial content
+	for _, parseErr := range doc.Errors {
+		// Check if this error is about the section header
+		if parseErr.Code == "missing-section-close" {
+			// Check if the error is at a position that matches this section
+			if parseErr.Range.Start.Line == section.HeaderRange.Start.Line {
+				errors = append(errors, ValidationError{
+					Property: section.Header,
+					Value:    section.Header,
+					Reason:   fmt.Sprintf("malformed section header: %s", parseErr.Message),
+					Range:    section.HeaderRange,
+				})
+				return errors
+			}
+		}
+	}
+
+	// Then, do basic syntax validation for balanced brackets and braces
+	if err := validateGlobSyntax(section.Header); err != nil {
+		errors = append(errors, ValidationError{
+			Property: section.Header,
+			Value:    section.Header,
+			Reason:   fmt.Sprintf("invalid glob pattern: %v", err),
+			Range:    section.HeaderRange,
+		})
+		return errors
+	}
+
+	// Validate the glob pattern using editorconfig-core-go's FnmatchCase
+	// A valid pattern should compile without error when matching against any filename
+	// Use recover to catch panics from invalid patterns
+	func() {
+		defer func() {
+			if r := recover(); r != nil {
+				errors = append(errors, ValidationError{
+					Property: section.Header,
+					Value:    section.Header,
+					Reason:   fmt.Sprintf("invalid glob pattern: %v", r),
+					Range:    section.HeaderRange,
+				})
+			}
+		}()
+
+		_, err := editorconfig.FnmatchCase(section.Header, "testfilename")
+		if err != nil {
+			errors = append(errors, ValidationError{
+				Property: section.Header,
+				Value:    section.Header,
+				Reason:   fmt.Sprintf("invalid glob pattern: %v", err),
+				Range:    section.HeaderRange,
+			})
+		}
+	}()
+
+	return errors
+}
+
+// validateGlobSyntax performs basic syntax validation for EditorConfig glob patterns.
+// It checks for balanced brackets [] and braces {}.
+func validateGlobSyntax(pattern string) error {
+	// Check for balanced brackets
+	bracketDepth := 0
+	braceDepth := 0
+	inEscape := false
+
+	for i, r := range pattern {
+		if inEscape {
+			inEscape = false
+			continue
+		}
+
+		switch r {
+		case '\\':
+			inEscape = true
+		case '[':
+			bracketDepth++
+		case ']':
+			if bracketDepth <= 0 {
+				return fmt.Errorf("unbalanced closing bracket at position %d", i)
+			}
+			bracketDepth--
+		case '{':
+			braceDepth++
+		case '}':
+			if braceDepth <= 0 {
+				return fmt.Errorf("unbalanced closing brace at position %d", i)
+			}
+			braceDepth--
+		}
+	}
+
+	if bracketDepth > 0 {
+		return fmt.Errorf("unbalanced opening bracket (missing ])")
+	}
+	if braceDepth > 0 {
+		return fmt.Errorf("unbalanced opening brace (missing })")
+	}
+
+	return nil
 }
