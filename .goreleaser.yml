@@ -41,7 +41,6 @@ release:
     name: ecfg
   draft: false
   prerelease: auto
-  name_template: "{{ if .IsPrerelease }}Pre-release {{ .Version }}{{ else }}{{ .Version }}{{ end }}"
 
 # Customization notes:
 # - GoReleaser will automatically detect version from git tags
