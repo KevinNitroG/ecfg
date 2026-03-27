@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/KevinNitroG/ecfg/internal/parser"
+	"github.com/KevinNitroG/ecfg/internal/resolver"
 	"github.com/KevinNitroG/ecfg/internal/validator"
 )
 
@@ -156,4 +157,60 @@ func formatMessage(err validator.ValidationError) string {
 
 	// Fallback to the raw reason
 	return err.Reason
+}
+
+// AddRedundantPropertyDiagnostics adds info-level diagnostics for properties
+// that are redundant (inherited from parent .editorconfig files with same value).
+// The resolver is used to determine inheritance.
+func AddRedundantPropertyDiagnostics(diagnostics []Diagnostic, doc *parser.Document, filePath string, res *resolver.Resolver) []Diagnostic {
+	if doc == nil || res == nil {
+		return diagnostics
+	}
+
+	// Find redundant properties
+	redundant, err := res.FindRedundantProperties(filePath)
+	if err != nil {
+		return diagnostics
+	}
+
+	// Create info diagnostics for each redundant property
+	for key, parentValue := range redundant {
+		// Find the KeyValue in the document for this property
+		kv := findKeyValue(doc, key)
+		if kv != nil {
+			diagnostics = append(diagnostics, Diagnostic{
+				Range:    kv.KeyRange,
+				Severity: SeverityInfo,
+				Message:  fmt.Sprintf("Property %q is redundant; inherits value %q from parent .editorconfig", key, parentValue),
+				Source:   "ecfg",
+			})
+		}
+	}
+
+	return diagnostics
+}
+
+// findKeyValue finds a KeyValue by property name in the document.
+func findKeyValue(doc *parser.Document, propName string) *parser.KeyValue {
+	propNameLower := strings.ToLower(propName)
+
+	// Check preamble
+	if doc.Preamble != nil {
+		for _, kv := range doc.Preamble.Pairs {
+			if strings.ToLower(kv.Key) == propNameLower {
+				return kv
+			}
+		}
+	}
+
+	// Check sections
+	for _, section := range doc.Sections {
+		for _, kv := range section.Pairs {
+			if strings.ToLower(kv.Key) == propNameLower {
+				return kv
+			}
+		}
+	}
+
+	return nil
 }
