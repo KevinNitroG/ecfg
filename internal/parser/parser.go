@@ -45,10 +45,7 @@ func (p *Parser) peek() Token {
 // expect checks if the current token matches the expected type.
 // If not, it adds a parse error and returns false.
 func (p *Parser) expect(tokenType TokenType) bool {
-	if p.current.Type == tokenType {
-		return true
-	}
-	return false
+	return p.current.Type == tokenType
 }
 
 // consume advances if the current token matches the expected type.
@@ -100,6 +97,10 @@ func (p *Parser) parseDocument() *Document {
 
 	for p.current.Type != TokenEOF {
 		switch p.current.Type {
+		case TokenEOF, TokenSectionEnd, TokenEquals, TokenValue:
+			// Unexpected at top-level - skip and add error
+			p.addError(p.current.Range, "unexpected token", "unexpected-token")
+			p.advance()
 		case TokenComment:
 			comment := p.parseComment()
 			if inPreamble {
@@ -247,17 +248,14 @@ func (p *Parser) parseSection() *Section {
 				pairs = append(pairs, kv)
 			}
 
-		case TokenNewline:
-			p.advance()
-
-		default:
-			// End of section
+		case TokenEOF, TokenSectionStart, TokenSectionEnd, TokenEquals, TokenValue, TokenNewline:
+			// End of section or skip
 			goto endSection
 		}
 	}
 
 endSection:
-	endPos := p.current.Range.Start
+	var endPos Position
 	if len(pairs) > 0 {
 		endPos = pairs[len(pairs)-1].Range.End
 	} else if len(comments) > 0 {
@@ -305,15 +303,18 @@ func (p *Parser) parseKeyValue() *KeyValue {
 	valueStart := p.current.Range.Start
 	valueEnd := p.current.Range.End
 
-	if p.current.Type == TokenValue {
+	switch p.current.Type {
+	case TokenValue:
 		value = strings.TrimSpace(p.current.Value)
 		valueEnd = p.current.Range.End
 		p.advance()
-	} else if p.current.Type == TokenIdentifier {
+	case TokenIdentifier:
 		// Sometimes the lexer might emit identifier instead of value
 		value = strings.TrimSpace(p.current.Value)
 		valueEnd = p.current.Range.End
 		p.advance()
+	case TokenEOF, TokenComment, TokenSectionStart, TokenSectionEnd, TokenEquals, TokenNewline:
+		// Invalid tokens after equals - empty value is valid
 	}
 	// else: empty value is valid
 

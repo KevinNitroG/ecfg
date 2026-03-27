@@ -20,30 +20,30 @@ func TestResolver_Resolve(t *testing.T) {
 
 	// Create root .editorconfig
 	rootConfig := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0644)
+	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create project .editorconfig
 	projectDir := filepath.Join(tmpDir, "project")
-	err = os.MkdirAll(projectDir, 0755)
+	err = os.MkdirAll(projectDir, 0o755)
 	require.NoError(t, err)
 
 	projectConfig := filepath.Join(projectDir, ".editorconfig")
-	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0644)
+	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create src .editorconfig
 	srcDir := filepath.Join(projectDir, "src")
-	err = os.MkdirAll(srcDir, 0755)
+	err = os.MkdirAll(srcDir, 0o755)
 	require.NoError(t, err)
 
 	srcConfig := filepath.Join(srcDir, ".editorconfig")
-	err = os.WriteFile(srcConfig, []byte("[*]\nend_of_line = lf\n"), 0644)
+	err = os.WriteFile(srcConfig, []byte("[*]\nend_of_line = lf\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create target file
 	targetFile := filepath.Join(srcDir, "file.go")
-	err = os.WriteFile(targetFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(targetFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	// Test resolution
@@ -69,21 +69,21 @@ func TestResolver_InheritedProperties(t *testing.T) {
 
 	// Create parent .editorconfig
 	rootConfig := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\ncharset = utf-8\n"), 0644)
+	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\ncharset = utf-8\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create child .editorconfig with redundant property
 	projectDir := filepath.Join(tmpDir, "project")
-	err = os.MkdirAll(projectDir, 0755)
+	err = os.MkdirAll(projectDir, 0o755)
 	require.NoError(t, err)
 
 	projectConfig := filepath.Join(projectDir, ".editorconfig")
-	err = os.WriteFile(projectConfig, []byte("[*]\nindent_style = space\nend_of_line = lf\n"), 0644)
+	err = os.WriteFile(projectConfig, []byte("[*]\nindent_style = space\nend_of_line = lf\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create target file
 	targetFile := filepath.Join(projectDir, "file.go")
-	err = os.WriteFile(targetFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(targetFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	// Test inheritance detection
@@ -104,16 +104,16 @@ func TestResolver_StopsAtRootTrue(t *testing.T) {
 
 	// Create root .editorconfig with root=true
 	rootConfig := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0644)
+	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create project .editorconfig (should NOT be traversed beyond root)
 	projectDir := filepath.Join(tmpDir, "project")
-	err = os.MkdirAll(projectDir, 0755)
+	err = os.MkdirAll(projectDir, 0o755)
 	require.NoError(t, err)
 
 	projectConfig := filepath.Join(projectDir, ".editorconfig")
-	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0644)
+	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0o644)
 	require.NoError(t, err)
 
 	// Test resolution
@@ -132,16 +132,16 @@ func TestResolver_StopsAtFilesystemRoot(t *testing.T) {
 
 	// Create .editorconfig WITHOUT root=true (should traverse to filesystem root)
 	configPath := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(configPath, []byte("[*]\nindent_style = space\n"), 0644)
+	err := os.WriteFile(configPath, []byte("[*]\nindent_style = space\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create target file in a nested directory
 	subDir := filepath.Join(tmpDir, "subdir", "nested")
-	err = os.MkdirAll(subDir, 0755)
+	err = os.MkdirAll(subDir, 0o755)
 	require.NoError(t, err)
 
 	targetFile := filepath.Join(subDir, "file.go")
-	err = os.WriteFile(targetFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(targetFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	// Test resolution
@@ -160,21 +160,21 @@ func TestResolver_FindRedundantProperties(t *testing.T) {
 
 	// Create parent .editorconfig
 	rootConfig := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0644)
+	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create child .editorconfig with same value (redundant)
 	projectDir := filepath.Join(tmpDir, "project")
-	err = os.MkdirAll(projectDir, 0755)
+	err = os.MkdirAll(projectDir, 0o755)
 	require.NoError(t, err)
 
 	projectConfig := filepath.Join(projectDir, ".editorconfig")
-	err = os.WriteFile(projectConfig, []byte("[*]\nindent_style = space\nend_of_line = lf\n"), 0644)
+	err = os.WriteFile(projectConfig, []byte("[*]\nindent_style = space\nend_of_line = lf\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create target file
 	targetFile := filepath.Join(projectDir, "file.go")
-	err = os.WriteFile(targetFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(targetFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	// Test redundant properties
@@ -198,21 +198,21 @@ func TestResolver_ResolveWithSource(t *testing.T) {
 
 	// Create root .editorconfig
 	rootConfig := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0644)
+	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create project .editorconfig
 	projectDir := filepath.Join(tmpDir, "project")
-	err = os.MkdirAll(projectDir, 0755)
+	err = os.MkdirAll(projectDir, 0o755)
 	require.NoError(t, err)
 
 	projectConfig := filepath.Join(projectDir, ".editorconfig")
-	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0644)
+	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create target file
 	targetFile := filepath.Join(projectDir, "file.go")
-	err = os.WriteFile(targetFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(targetFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	// Test resolve with source tracking
@@ -237,30 +237,30 @@ func TestInheritance(t *testing.T) {
 
 	// Create root .editorconfig (root=true)
 	rootConfig := filepath.Join(tmpDir, ".editorconfig")
-	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\ncharset = utf-8\n"), 0644)
+	err := os.WriteFile(rootConfig, []byte("root = true\n[*]\nindent_style = space\ncharset = utf-8\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create project level
 	projectDir := filepath.Join(tmpDir, "project")
-	err = os.MkdirAll(projectDir, 0755)
+	err = os.MkdirAll(projectDir, 0o755)
 	require.NoError(t, err)
 
 	projectConfig := filepath.Join(projectDir, ".editorconfig")
-	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0644)
+	err = os.WriteFile(projectConfig, []byte("[*]\nindent_size = 2\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create src level
 	srcDir := filepath.Join(projectDir, "src")
-	err = os.MkdirAll(srcDir, 0755)
+	err = os.MkdirAll(srcDir, 0o755)
 	require.NoError(t, err)
 
 	srcConfig := filepath.Join(srcDir, ".editorconfig")
-	err = os.WriteFile(srcConfig, []byte("[*]\nindent_style = space\nend_of_line = lf\n"), 0644)
+	err = os.WriteFile(srcConfig, []byte("[*]\nindent_style = space\nend_of_line = lf\n"), 0o644)
 	require.NoError(t, err)
 
 	// Create target file
 	targetFile := filepath.Join(srcDir, "file.go")
-	err = os.WriteFile(targetFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(targetFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	resolver := NewResolver(tmpDir)
@@ -273,7 +273,7 @@ func TestInheritance(t *testing.T) {
 
 	// Test b: Resolve from project
 	projectFile := filepath.Join(projectDir, "main.go")
-	err = os.WriteFile(projectFile, []byte("package main\n"), 0644)
+	err = os.WriteFile(projectFile, []byte("package main\n"), 0o644)
 	require.NoError(t, err)
 
 	def, err = resolver.Resolve(projectFile)

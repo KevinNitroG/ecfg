@@ -1,8 +1,9 @@
 package validator
 
 import (
-	"github.com/KevinNitroG/ecfg/internal/parser"
 	"testing"
+
+	"github.com/KevinNitroG/ecfg/internal/parser"
 )
 
 // TestValidateInvalidEnumValue tests that invalid enum values are detected.

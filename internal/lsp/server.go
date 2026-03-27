@@ -102,9 +102,9 @@ func (s *Server) handleInitialize(ctx context.Context, reply jsonrpc2.Replier, r
 	}
 
 	// Store workspace root if provided
-	if params.RootURI != "" {
+	if len(params.WorkspaceFolders) > 0 {
 		s.mu.Lock()
-		s.workspace = string(params.RootURI)
+		s.workspace = string(params.WorkspaceFolders[0].URI)
 		s.mu.Unlock()
 		log.Printf("handleInitialize: workspace set to %s", s.workspace)
 	}
