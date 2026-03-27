@@ -18,21 +18,22 @@ builds:
 
 archives:
   - id: default
-    format: tar.gz
-    format_overrides:
-      - goos: windows
-        format: zip
+    formats:
+      - tar.gz
+      - zip
     files:
       - README.md
-      - LICENSE
+
+checksum:
+  name_template: 'checksums.txt'
 
 changelog:
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
-      - '^chore:'
-      - '^ci:'
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
 
 release:
   github:
@@ -40,7 +41,7 @@ release:
     name: ecfg
   draft: false
   prerelease: auto
-  name_template: '{{ if .IsPrerelease }}Pre-release {{ .Version }}{{ else }}{{ .Version }}{{ end }}'
+  name_template: "{{ if .IsPrerelease }}Pre-release {{ .Version }}{{ else }}{{ .Version }}{{ end }}"
 
 # Customization notes:
 # - GoReleaser will automatically detect version from git tags
