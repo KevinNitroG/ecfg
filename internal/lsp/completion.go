@@ -17,6 +17,7 @@ type CompletionContext struct {
 	PropertyKey     string // For value completion, which property?
 	InPreamble      bool   // True if in document preamble
 	InSection       bool   // True if in a section
+	SectionIndex    int    // Index of section if inSection is true, -1 otherwise
 }
 
 // detectCompletionContext determines what the user is completing based on cursor position.
@@ -49,13 +50,14 @@ func detectCompletionContext(doc *parser.Document, pos protocol.Position) Comple
 					ctx.PropertyKey = kv.Key
 					ctx.InPreamble = true
 					ctx.InSection = false
+					ctx.SectionIndex = -1
 					return ctx
 				}
 			}
 		}
 
 		// Check sections
-		for _, section := range doc.Sections {
+		for i, section := range doc.Sections {
 			for _, kv := range section.Pairs {
 				// If cursor is on the same line as the KeyValue and after the key
 				if kv.Range.Start.Line == parserPos.Line && parserPos.Column > kv.KeyRange.End.Column {
@@ -64,6 +66,7 @@ func detectCompletionContext(doc *parser.Document, pos protocol.Position) Comple
 					ctx.PropertyKey = kv.Key
 					ctx.InPreamble = false
 					ctx.InSection = true
+					ctx.SectionIndex = i
 					return ctx
 				}
 			}
@@ -87,9 +90,11 @@ func detectCompletionContext(doc *parser.Document, pos protocol.Position) Comple
 
 		if inAnySection {
 			ctx.InSection = true
+			ctx.SectionIndex = findCurrentSectionIndex(doc, parserPos)
 		} else {
 			// No section before cursor = preamble
 			ctx.InPreamble = true
+			ctx.SectionIndex = -1
 		}
 
 		return ctx
@@ -111,18 +116,59 @@ func detectCompletionContext(doc *parser.Document, pos protocol.Position) Comple
 
 	ctx.InPreamble = node.InPreamble
 	ctx.InSection = node.InSection
+	if node.InSection && node.KeyValue != nil {
+		ctx.SectionIndex = findCurrentSectionIndex(doc, parserPos)
+	} else {
+		ctx.SectionIndex = -1
+	}
 
 	return ctx
 }
 
+// findCurrentSectionIndex returns the index of the section that contains the given position.
+// Returns -1 if no section contains the position.
+func findCurrentSectionIndex(doc *parser.Document, pos parser.Position) int {
+	for i, section := range doc.Sections {
+		// Check if position is within section range (between header and end of section)
+		if pos.Line >= section.HeaderRange.Start.Line {
+			// Check if this is the last section or position is before next section
+			if i == len(doc.Sections)-1 || pos.Line < doc.Sections[i+1].HeaderRange.Start.Line {
+				return i
+			}
+		}
+	}
+	return -1
+}
+
 // completePropertyKeys returns completion items for property keys.
 // Filters out preamble-only properties (like "root") when not in preamble.
-func completePropertyKeys(inPreamble bool) []protocol.CompletionItem {
+// Filters out properties already defined in the current context (preamble or section).
+func completePropertyKeys(doc *parser.Document, inPreamble bool, inSection bool, sectionIndex int) []protocol.CompletionItem {
+	// Collect properties already defined in current context
+	definedProps := make(map[string]bool)
+	if inPreamble && doc.Preamble != nil {
+		for _, kv := range doc.Preamble.Pairs {
+			definedProps[strings.ToLower(kv.Key)] = true
+		}
+	}
+
+	// If in a section, also filter out properties already defined in that section
+	if inSection && sectionIndex >= 0 && sectionIndex < len(doc.Sections) {
+		for _, kv := range doc.Sections[sectionIndex].Pairs {
+			definedProps[strings.ToLower(kv.Key)] = true
+		}
+	}
+
 	items := []protocol.CompletionItem{}
 
 	for name, schema := range validator.Schema {
 		// Filter out root if not in preamble
 		if schema.PreambleOnly && !inPreamble {
+			continue
+		}
+
+		// Filter out properties already defined in current context
+		if definedProps[strings.ToLower(name)] {
 			continue
 		}
 
@@ -210,7 +256,7 @@ func ComputeCompletion(doc *parser.Document, pos protocol.Position) *protocol.Co
 	var items []protocol.CompletionItem
 
 	if ctx.CompletingKey {
-		items = completePropertyKeys(ctx.InPreamble)
+		items = completePropertyKeys(doc, ctx.InPreamble, ctx.InSection, ctx.SectionIndex)
 	} else if ctx.CompletingValue {
 		items = completePropertyValues(ctx.PropertyKey)
 	} else {

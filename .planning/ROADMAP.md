@@ -222,6 +222,16 @@ Phase 5 (Integration) ← requires all features
 ✓ Success criteria are observable/testable  
 ✓ Dependencies follow logical build order
 
+### Phase 6: spelling_language
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 0/1 plans complete
+
+Plans:
+- [x] TBD (run /gsd:plan-phase 6 to break down) (completed 2026-03-27)
+
 ---
 
 *Roadmap created: 2026-03-18*

@@ -122,6 +122,21 @@ var Schema = map[string]PropertySchema{
 		MinValue:      ptrInt(1),
 		Description:   "Maximum line length in characters, or 'off' to disable",
 	},
+	"spelling_language": {
+		Name: "spelling_language",
+		Type: PropertyTypeEnum,
+		ValidValues: []string{
+			"en", "en-US", "en-GB", "en-AU", "en-CA", "en-NZ",
+			"es", "es-ES", "es-MX", "fr", "fr-FR", "fr-CA",
+			"de", "de-DE", "de-AT", "it", "it-IT", "pt", "pt-BR", "pt-PT",
+			"nl", "nl-BE", "sv", "sv-SE", "da", "da-DK", "fi", "fi-FI",
+			"no", "no-NO", "nb", "nb-NO", "ru", "ru-RU", "uk", "uk-UA",
+			"pl", "pl-PL", "cs", "cs-CZ", "hu", "hu-HU", "ro", "ro-RO",
+			"tr", "tr-TR", "el", "el-GR", "zh", "zh-CN", "zh-TW", "ja", "ja-JP",
+			"ko", "ko-KR", "ar", "ar-SA", "he", "he-IL",
+		},
+		Description: "Natural language for spell checking (ISO 639 language code, optionally with ISO 3166 territory)",
+	},
 }
 
 // ptrInt is a helper to create a pointer to an int.

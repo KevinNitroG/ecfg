@@ -107,8 +107,8 @@ func TestCompletePropertyKeysInPreamble(t *testing.T) {
 	require.NotNil(t, completion)
 	assert.False(t, completion.IsIncomplete)
 
-	// Should include all 9 properties including root
-	assert.Len(t, completion.Items, 9)
+	// Should include all 10 properties including root
+	assert.Len(t, completion.Items, 10)
 
 	// Find root property
 	var rootItem *protocol.CompletionItem
@@ -133,8 +133,8 @@ func TestCompletePropertyKeysInSection(t *testing.T) {
 
 	require.NotNil(t, completion)
 
-	// Should include 8 properties (excluding root)
-	assert.Len(t, completion.Items, 8)
+	// Should include 9 properties (excluding root)
+	assert.Len(t, completion.Items, 9)
 
 	// Verify root is NOT present
 	for _, item := range completion.Items {
@@ -253,4 +253,30 @@ func TestCompletionItemInsertText(t *testing.T) {
 
 	require.NotNil(t, indentStyleItem)
 	assert.Equal(t, "indent_style = ", indentStyleItem.InsertText)
+}
+
+func TestCompletePropertyKeysExcludesDefinedProperties(t *testing.T) {
+	source := "trim_trailing_whitespace = true\nind"
+	doc, err := parser.Parse([]byte(source))
+	require.NoError(t, err)
+
+	completion := ComputeCompletion(doc, protocol.Position{Line: 1, Character: 2})
+
+	require.NotNil(t, completion)
+
+	// trim_trailing_whitespace is already defined in preamble, so should not appear
+	for _, item := range completion.Items {
+		assert.NotEqual(t, "trim_trailing_whitespace", item.Label,
+			"trim_trailing_whitespace should not appear when already defined in preamble")
+	}
+
+	// Other properties should still be available
+	var foundIndentStyle bool
+	for _, item := range completion.Items {
+		if item.Label == "indent_style" {
+			foundIndentStyle = true
+			break
+		}
+	}
+	assert.True(t, foundIndentStyle, "indent_style should still be available")
 }

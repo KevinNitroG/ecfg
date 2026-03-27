@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-// TestPropertySchemaCompletion verifies all 9 properties are defined.
+// TestPropertySchemaCompletion verifies all properties are defined.
 func TestPropertySchemaCompletion(t *testing.T) {
 	requiredProperties := []string{
 		"root",
@@ -16,6 +16,7 @@ func TestPropertySchemaCompletion(t *testing.T) {
 		"trim_trailing_whitespace",
 		"insert_final_newline",
 		"max_line_length",
+		"spelling_language",
 	}
 
 	for _, prop := range requiredProperties {
@@ -44,6 +45,7 @@ func TestPropertyTypes(t *testing.T) {
 		{"trim_trailing_whitespace", PropertyTypeBoolean},
 		{"insert_final_newline", PropertyTypeBoolean},
 		{"max_line_length", PropertyTypeInteger},
+		{"spelling_language", PropertyTypeEnum},
 	}
 
 	for _, tt := range tests {
