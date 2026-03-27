@@ -1,7 +1,6 @@
 ---
 name: gsd-nyquist-auditor
 description: Fills Nyquist validation gaps by generating tests and verifying coverage for phase requirements
-model: github-copilot/claude-haiku-4.5
 mode: subagent
 ---
 

@@ -102,12 +102,12 @@ check_export_used() {
 
   # Find imports
   local imports=$(grep -r "import.*$export_name" "$search_path" \
-    --include="*.ts" --include="*.tsx" 2>/dev/null |
+    --include="*.ts" --include="*.tsx" 2>/dev/null | \
     grep -v "$source_phase" | wc -l)
 
   # Find usage (not just import)
   local uses=$(grep -r "$export_name" "$search_path" \
-    --include="*.ts" --include="*.tsx" 2>/dev/null |
+    --include="*.ts" --include="*.tsx" 2>/dev/null | \
     grep -v "import" | grep -v "$source_phase" | wc -l)
 
   if [ "$imports" -gt 0 ] && [ "$uses" -gt 0 ]; then
@@ -403,9 +403,9 @@ Return structured report to milestone auditor:
 
 #### Requirements Integration Map
 
-| Requirement | Integration Path                             | Status                    | Issue                   |
-| ----------- | -------------------------------------------- | ------------------------- | ----------------------- |
-| {REQ-ID}    | {Phase X export → Phase Y import → consumer} | WIRED / PARTIAL / UNWIRED | {specific issue or "—"} |
+| Requirement | Integration Path | Status | Issue |
+|-------------|-----------------|--------|-------|
+| {REQ-ID} | {Phase X export → Phase Y import → consumer} | WIRED / PARTIAL / UNWIRED | {specific issue or "—"} |
 
 **Requirements with no cross-phase wiring:**
 {List REQ-IDs that exist in a single phase with no integration touchpoints — these may be self-contained or may indicate missing connections}

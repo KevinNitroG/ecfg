@@ -1,7 +1,6 @@
 ---
 name: gsd-research-synthesizer
 description: Synthesizes research outputs from parallel researcher agents into SUMMARY.md. Spawned by /gsd-new-project after 4 researcher agents complete.
-model: github-copilot/claude-sonnet-4.5
 mode: subagent
 ---
 
