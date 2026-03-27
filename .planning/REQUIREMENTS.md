@@ -53,11 +53,11 @@
 
 ### File System Resolution (FS)
 
-- [ ] **FS-01**: Server traverses parent directories to find parent `.editorconfig` files
-- [ ] **FS-02**: Server stops traversal when `root = true` is found in a parent file
-- [ ] **FS-03**: Server stops traversal at system root if no `root = true` found
-- [ ] **FS-04**: Server uses editorconfig-core-go library for correct resolution semantics
-- [ ] **FS-05**: Server detects property inheritance from parent files for diagnostics
+- [x] **FS-01**: Server traverses parent directories to find parent `.editorconfig` files
+- [x] **FS-02**: Server stops traversal when `root = true` is found in a parent file
+- [x] **FS-03**: Server stops traversal at system root if no `root = true` found
+- [x] **FS-04**: Server uses editorconfig-core-go library for correct resolution semantics
+- [x] **FS-05**: Server detects property inheritance from parent files for diagnostics
 
 ### LSP Lifecycle (LSP)
 
@@ -148,11 +148,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | COMP-03 | Phase 3 | Complete |
 | COMP-04 | Phase 3 | Complete |
 | COMP-05 | Phase 3 | Complete |
-| FS-01 | Phase 4 | Pending |
-| FS-02 | Phase 4 | Pending |
-| FS-03 | Phase 4 | Pending |
-| FS-04 | Phase 4 | Pending |
-| FS-05 | Phase 4 | Pending |
+| FS-01 | Phase 4 | Complete |
+| FS-02 | Phase 4 | Complete |
+| FS-03 | Phase 4 | Complete |
+| FS-04 | Phase 4 | Complete |
+| FS-05 | Phase 4 | Complete |
 | LSP-01 | Phase 5 | Pending |
 | LSP-02 | Phase 5 | Pending |
 | LSP-03 | Phase 5 | Pending |

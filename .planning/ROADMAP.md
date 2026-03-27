@@ -11,7 +11,7 @@
 | 1 | Core Parser & AST | 7 | Complete ✅ |
 | 2 | Schema Validation & Diagnostics | 15 | Complete ✅ |
 | 3 | LSP Intelligence Features | 9 | Complete ✅ |
-| 4 | File System Resolution | 5 | Pending |
+| 4 | 1/1 | Complete   | 2026-03-27 |
 | 5 | Editor Integration | 2 | Pending |
 
 **Total: 5 phases covering 36 requirements**
