@@ -20,6 +20,14 @@ type Server struct {
 	documents  map[protocol.DocumentURI]*document
 	workspace  string
 	initialize bool
+	conn       jsonrpc2.Conn
+}
+
+// SetConn sets the connection for the server to enable notifications.
+func (s *Server) SetConn(conn jsonrpc2.Conn) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.conn = conn
 }
 
 // document represents an open text document in the LSP server.
@@ -42,6 +50,7 @@ func NewServer() *Server {
 // This implements the jsonrpc2.Handler interface.
 func (s *Server) ServerHandler() func(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
 	return func(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
+		log.Printf("ServerHandler: received method=%s", req.Method())
 		switch req.Method() {
 		// Lifecycle methods
 		case "initialize":
@@ -84,8 +93,11 @@ func (s *Server) handleInitialize(ctx context.Context, reply jsonrpc2.Replier, r
 	s.initialize = true
 	s.mu.Unlock()
 
+	log.Println("handleInitialize: received initialize request")
+
 	var params protocol.InitializeParams
 	if err := json.Unmarshal(req.Params(), &params); err != nil {
+		log.Printf("handleInitialize: failed to parse params: %v", err)
 		return reply(ctx, nil, err)
 	}
 
@@ -94,6 +106,7 @@ func (s *Server) handleInitialize(ctx context.Context, reply jsonrpc2.Replier, r
 		s.mu.Lock()
 		s.workspace = string(params.RootURI)
 		s.mu.Unlock()
+		log.Printf("handleInitialize: workspace set to %s", s.workspace)
 	}
 
 	result := &protocol.InitializeResult{
@@ -123,10 +136,14 @@ func (s *Server) handleShutdown(ctx context.Context, reply jsonrpc2.Replier, req
 
 // handleDidOpen handles the textDocument/didOpen notification.
 func (s *Server) handleDidOpen(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
+	log.Println("handleDidOpen: received notification")
 	var params protocol.DidOpenTextDocumentParams
 	if err := json.Unmarshal(req.Params(), &params); err != nil {
+		log.Printf("handleDidOpen: failed to parse params: %v", err)
 		return nil
 	}
+
+	log.Printf("handleDidOpen: uri=%s, version=%d, content_len=%d", params.TextDocument.URI, params.TextDocument.Version, len(params.TextDocument.Text))
 
 	uri := params.TextDocument.URI
 	content := params.TextDocument.Text
@@ -163,28 +180,45 @@ func (s *Server) handleDidOpen(ctx context.Context, reply jsonrpc2.Replier, req 
 
 // handleDidChange handles the textDocument/didChange notification.
 func (s *Server) handleDidChange(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
+	log.Println("handleDidChange: received notification")
 	var params protocol.DidChangeTextDocumentParams
 	if err := json.Unmarshal(req.Params(), &params); err != nil {
+		log.Printf("handleDidChange: failed to parse params: %v", err)
 		return nil
 	}
+
+	log.Printf("handleDidChange: uri=%s, version=%d", params.TextDocument.URI, params.TextDocument.Version)
 
 	uri := params.TextDocument.URI
 	version := int(params.TextDocument.Version)
-	content := params.ContentChanges[0].Text
 
 	s.mu.Lock()
 	doc, exists := s.documents[uri]
+
+	// If document doesn't exist (no didOpen received), create it
 	if !exists {
-		s.mu.Unlock()
-		return nil
+		log.Printf("handleDidChange: document %s doesn't exist, creating on first didChange", uri)
+		doc = &document{
+			URI:     uri,
+			Version: version,
+			Content: "",
+		}
+		s.documents[uri] = doc
 	}
 
-	// Update content and reparse
-	doc.Content = content
+	// Handle each content change
+	for _, change := range params.ContentChanges {
+		// Full document sync - Text field contains entire content
+		// (Neovim 0.10+ uses full sync by default for textDocumentSync.change = 1)
+		if change.Text != "" {
+			doc.Content = change.Text
+		}
+	}
+
 	doc.Version = version
 
-	if content != "" {
-		doc.AST, _ = parser.Parse([]byte(content))
+	if doc.Content != "" {
+		doc.AST, _ = parser.Parse([]byte(doc.Content))
 	} else {
 		doc.AST = nil
 	}
@@ -222,10 +256,14 @@ func (s *Server) handleDidClose(ctx context.Context, reply jsonrpc2.Replier, req
 
 // handleHover handles the textDocument/hover request.
 func (s *Server) handleHover(ctx context.Context, reply jsonrpc2.Replier, req jsonrpc2.Request) error {
+	log.Println("handleHover: received request")
 	var params protocol.TextDocumentPositionParams
 	if err := json.Unmarshal(req.Params(), &params); err != nil {
+		log.Printf("handleHover: failed to parse params: %v", err)
 		return reply(ctx, nil, err)
 	}
+
+	log.Printf("handleHover: uri=%s, line=%d, char=%d", params.TextDocument.URI, params.Position.Line, params.Position.Character)
 
 	s.mu.RLock()
 	doc, exists := s.documents[params.TextDocument.URI]
@@ -280,8 +318,21 @@ func (s *Server) publishDiagnostics(ctx context.Context, uri protocol.DocumentUR
 		}
 	}
 
-	// Send notification - we need to use the connection for this
-	// For now, we'll rely on jsonrpc2's notification mechanism
-	// The actual notification sending would need to be done via the connection
-	log.Printf("Publishing %d diagnostics for %s (version %d)", len(diagnostics), uri, version)
+	// Send notification via the connection
+	s.mu.RLock()
+	conn := s.conn
+	s.mu.RUnlock()
+
+	if conn != nil {
+		params := &protocol.PublishDiagnosticsParams{
+			URI:         uri,
+			Version:     uint32(version),
+			Diagnostics: lspDiags,
+		}
+		if err := conn.Notify(ctx, "textDocument/publishDiagnostics", params); err != nil {
+			log.Printf("Failed to publish diagnostics: %v", err)
+		}
+	} else {
+		log.Printf("Publishing %d diagnostics for %s (version %d)", len(diagnostics), uri, version)
+	}
 }

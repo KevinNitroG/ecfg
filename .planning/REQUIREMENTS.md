@@ -17,24 +17,24 @@
 
 ### Schema Validation (SCHEMA)
 
-- [ ] **SCHEMA-01**: Server validates official EditorConfig properties: `root`, `indent_style`, `indent_size`, `tab_width`, `end_of_line`, `charset`, `trim_trailing_whitespace`, `insert_final_newline`
-- [ ] **SCHEMA-02**: Server validates `root` property appears only in preamble (not inside sections)
-- [ ] **SCHEMA-03**: Server validates `indent_style` accepts only `tab` or `space`
-- [ ] **SCHEMA-04**: Server validates `indent_size` accepts integers 1-8 or `tab`
-- [ ] **SCHEMA-05**: Server validates `tab_width` accepts positive integers
-- [ ] **SCHEMA-06**: Server validates `end_of_line` accepts only `lf`, `crlf`, or `cr`
-- [ ] **SCHEMA-07**: Server validates `charset` accepts only `utf-8`, `utf-8-bom`, `utf-16be`, `utf-16le`, `latin1`
-- [ ] **SCHEMA-08**: Server validates `trim_trailing_whitespace` accepts only `true` or `false`
-- [ ] **SCHEMA-09**: Server validates `insert_final_newline` accepts only `true` or `false`
+- [x] **SCHEMA-01**: Server validates official EditorConfig properties: `root`, `indent_style`, `indent_size`, `tab_width`, `end_of_line`, `charset`, `trim_trailing_whitespace`, `insert_final_newline`
+- [x] **SCHEMA-02**: Server validates `root` property appears only in preamble (not inside sections)
+- [x] **SCHEMA-03**: Server validates `indent_style` accepts only `tab` or `space`
+- [x] **SCHEMA-04**: Server validates `indent_size` accepts integers 1-8 or `tab`
+- [x] **SCHEMA-05**: Server validates `tab_width` accepts positive integers
+- [x] **SCHEMA-06**: Server validates `end_of_line` accepts only `lf`, `crlf`, or `cr`
+- [x] **SCHEMA-07**: Server validates `charset` accepts only `utf-8`, `utf-8-bom`, `utf-16be`, `utf-16le`, `latin1`
+- [x] **SCHEMA-08**: Server validates `trim_trailing_whitespace` accepts only `true` or `false`
+- [x] **SCHEMA-09**: Server validates `insert_final_newline` accepts only `true` or `false`
 
 ### Diagnostics (DIAG)
 
-- [ ] **DIAG-01**: Server emits error diagnostic for invalid property values (e.g., `indent_size = large`)
-- [ ] **DIAG-02**: Server emits error diagnostic for `root = true` placed inside section
-- [ ] **DIAG-03**: Server emits warning diagnostic for duplicate keys within same section
-- [ ] **DIAG-04**: Server emits warning diagnostic for logical conflicts (`indent_style = tab` with numeric `indent_size`)
-- [ ] **DIAG-05**: Server emits info diagnostic for redundant properties inherited from parent `.editorconfig`
-- [ ] **DIAG-06**: Diagnostics include precise Range (line/column start/end) for underline in editor
+- [x] **DIAG-01**: Server emits error diagnostic for invalid property values (e.g., `indent_size = large`)
+- [x] **DIAG-02**: Server emits error diagnostic for `root = true` placed inside section
+- [x] **DIAG-03**: Server emits warning diagnostic for duplicate keys within same section
+- [x] **DIAG-04**: Server emits warning diagnostic for logical conflicts (`indent_style = tab` with numeric `indent_size`)
+- [x] **DIAG-05**: Server emits info diagnostic for redundant properties inherited from parent `.editorconfig`
+- [x] **DIAG-06**: Diagnostics include precise Range (line/column start/end) for underline in editor
 
 ### Hover (HOVER)
 
@@ -61,20 +61,20 @@
 
 ### LSP Lifecycle (LSP)
 
-- [ ] **LSP-01**: Server handles `initialize` request and responds with capabilities
-- [ ] **LSP-02**: Server handles `textDocument/didOpen` to register new documents
-- [ ] **LSP-03**: Server handles `textDocument/didChange` to update document state
-- [ ] **LSP-04**: Server handles `textDocument/didClose` to clean up document state
-- [ ] **LSP-05**: Server maintains in-memory virtual file system for unsaved changes
-- [ ] **LSP-06**: Server triggers full document reparse on `didChange` events
-- [ ] **LSP-07**: Server handles `textDocument/hover` requests with cursor position
-- [ ] **LSP-08**: Server handles `textDocument/completion` requests with cursor position
-- [ ] **LSP-09**: Server handles `textDocument/publishDiagnostics` to send errors/warnings to client
+- [x] **LSP-01**: Server handles `initialize` request and responds with capabilities
+- [x] **LSP-02**: Server handles `textDocument/didOpen` to register new documents
+- [x] **LSP-03**: Server handles `textDocument/didChange` to update document state
+- [x] **LSP-04**: Server handles `textDocument/didClose` to clean up document state
+- [x] **LSP-05**: Server maintains in-memory virtual file system for unsaved changes
+- [x] **LSP-06**: Server triggers full document reparse on `didChange` events
+- [x] **LSP-07**: Server handles `textDocument/hover` requests with cursor position
+- [x] **LSP-08**: Server handles `textDocument/completion` requests with cursor position
+- [x] **LSP-09**: Server handles `textDocument/publishDiagnostics` to send errors/warnings to client
 
 ### Editor Integration (EDITOR)
 
-- [ ] **EDITOR-01**: Neovim integration documented in README with `lspconfig` configuration example
-- [ ] **EDITOR-02**: Server binary is cross-platform (Linux, macOS, Windows)
+- [x] **EDITOR-01**: Neovim integration documented in README with `lspconfig` configuration example
+- [x] **EDITOR-02**: Server binary is cross-platform (Linux, macOS, Windows)
 
 ## v2 Requirements
 
@@ -124,21 +124,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PARSE-05 | Phase 1 | Complete |
 | PARSE-06 | Phase 1 | Complete |
 | PARSE-07 | Phase 1 | Complete |
-| SCHEMA-01 | Phase 2 | Pending |
-| SCHEMA-02 | Phase 2 | Pending |
-| SCHEMA-03 | Phase 2 | Pending |
-| SCHEMA-04 | Phase 2 | Pending |
-| SCHEMA-05 | Phase 2 | Pending |
-| SCHEMA-06 | Phase 2 | Pending |
-| SCHEMA-07 | Phase 2 | Pending |
-| SCHEMA-08 | Phase 2 | Pending |
-| SCHEMA-09 | Phase 2 | Pending |
-| DIAG-01 | Phase 2 | Pending |
-| DIAG-02 | Phase 2 | Pending |
-| DIAG-03 | Phase 2 | Pending |
-| DIAG-04 | Phase 2 | Pending |
-| DIAG-05 | Phase 2 | Pending |
-| DIAG-06 | Phase 2 | Pending |
+| SCHEMA-01 | Phase 2 | Complete |
+| SCHEMA-02 | Phase 2 | Complete |
+| SCHEMA-03 | Phase 2 | Complete |
+| SCHEMA-04 | Phase 2 | Complete |
+| SCHEMA-05 | Phase 2 | Complete |
+| SCHEMA-06 | Phase 2 | Complete |
+| SCHEMA-07 | Phase 2 | Complete |
+| SCHEMA-08 | Phase 2 | Complete |
+| SCHEMA-09 | Phase 2 | Complete |
+| DIAG-01 | Phase 2 | Complete |
+| DIAG-02 | Phase 2 | Complete |
+| DIAG-03 | Phase 2 | Complete |
+| DIAG-04 | Phase 2 | Complete |
+| DIAG-05 | Phase 2 | Complete |
+| DIAG-06 | Phase 2 | Complete |
 | HOVER-01 | Phase 3 | Complete |
 | HOVER-02 | Phase 3 | Complete |
 | HOVER-03 | Phase 3 | Complete |
@@ -153,17 +153,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FS-03 | Phase 4 | Complete |
 | FS-04 | Phase 4 | Complete |
 | FS-05 | Phase 4 | Complete |
-| LSP-01 | Phase 5 | Pending |
-| LSP-02 | Phase 5 | Pending |
-| LSP-03 | Phase 5 | Pending |
-| LSP-04 | Phase 5 | Pending |
-| LSP-05 | Phase 5 | Pending |
-| LSP-06 | Phase 5 | Pending |
-| LSP-07 | Phase 5 | Pending |
-| LSP-08 | Phase 5 | Pending |
-| LSP-09 | Phase 5 | Pending |
-| EDITOR-01 | Phase 5 | Pending |
-| EDITOR-02 | Phase 5 | Pending |
+| LSP-01 | Phase 5 | Complete |
+| LSP-02 | Phase 5 | Complete |
+| LSP-03 | Phase 5 | Complete |
+| LSP-04 | Phase 5 | Complete |
+| LSP-05 | Phase 5 | Complete |
+| LSP-06 | Phase 5 | Complete |
+| LSP-07 | Phase 5 | Complete |
+| LSP-08 | Phase 5 | Complete |
+| LSP-09 | Phase 5 | Complete |
+| EDITOR-01 | Phase 5 | Complete |
+| EDITOR-02 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 36 total

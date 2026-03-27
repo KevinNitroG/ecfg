@@ -20,7 +20,34 @@ Download the latest release for your platform from the releases page.
 go build -o ecfg-lsp ./cmd/ecfg-lsp
 ```
 
-## Neovim Setup with lspconfig
+## Neovim Setup
+
+### Using vim.lsp.config (Neovim 0.10+)
+
+Add to your `init.lua`:
+
+```lua
+vim.filetype.add({
+  extension = {
+    editorconfig = "editorconfig",
+  },
+  filename = {
+    [".editorconfig"] = "editorconfig",
+  },
+})
+
+vim.lsp.config.ecfg = {
+  cmd = { '/path/to/ecfg-lsp' },
+  filetypes = { 'editorconfig' },
+  root_dir = function(fname)
+    return vim.fs.root(fname, { '.editorconfig' })
+  end,
+}
+
+vim.lsp.enable('ecfg')
+```
+
+### Using lspconfig
 
 Add to your Neovim configuration (Lua):
 

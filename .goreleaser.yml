@@ -1,0 +1,39 @@
+# .goreleaser.yml
+# Build configuration for GoReleaser
+project_name: ecfg
+
+archives:
+  - id: default
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - '^ci:'
+
+release:
+  github:
+    owner: KevinNitroG
+    name: ecfg
+  draft: false
+  prerelease: auto
+  name_template: '{{ if .IsPrerelease }}Pre-release {{ .Version }}{{ else }}{{ .Version }}{{ end }}'
+
+# Customization notes:
+# - GoReleaser will automatically detect version from git tags
+# - Set GITHUB_TOKEN in repository secrets for publishing

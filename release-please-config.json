@@ -1,0 +1,28 @@
+{
+  "release-type": "go",
+  "package-name": "ecfg-lsp",
+  "include-v-in-tag": true,
+  "separate-pull-request-body-changelog": false,
+  "changelog-sections": [
+    "type: feat",
+    "type: fix",
+    "type: perf",
+    "type: refactor",
+    "type: docs",
+    "type: test",
+    "type: build",
+    "type: ci",
+    "type: chore",
+    "type: revert"
+  ],
+  "pull-request-title-pattern": "chore: release ${version}",
+  "release-rules": [
+    { "type": "major", "release": "major" },
+    { "type": "minor", "release": "minor" },
+    { "type": "patch", "release": "patch" },
+    { "type": "dev-dependency", "release": "patch" }
+  ],
+  "extra-files": [
+    "README.md"
+  ]
+}
