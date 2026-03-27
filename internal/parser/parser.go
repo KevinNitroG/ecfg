@@ -98,9 +98,9 @@ func (p *Parser) parseDocument() *Document {
 	for p.current.Type != TokenEOF {
 		switch p.current.Type {
 		case TokenEOF, TokenSectionEnd, TokenEquals, TokenValue:
-			// Unexpected at top-level - skip and add error
+			// Unexpected at top-level - skip to next sync point
 			p.addError(p.current.Range, "unexpected token", "unexpected-token")
-			p.advance()
+			p.skipToSync()
 		case TokenComment:
 			comment := p.parseComment()
 			if inPreamble {
